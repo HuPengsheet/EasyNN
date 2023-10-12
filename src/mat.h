@@ -28,8 +28,8 @@ public:
     Mat& operator=(const Mat& m);
     ~Mat();
 
-    int is_empty();
-private:
+    int is_empty () const;
+
     size_t dims;     //数据的维度 0 or 1 or 2 or 3
     int c;           
     int h;

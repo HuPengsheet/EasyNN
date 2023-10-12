@@ -171,9 +171,9 @@ public:
     int i;
     float f;
     std::complex<float> c;
-    std::vector<int> ai;
-    std::vector<float> af;
-    std::vector<std::complex<float> > ac;
+    std::vector<int> ai;    //array int
+    std::vector<float> af;  //array float
+    std::vector<std::complex<float> > ac;   // array                                                                  complex
 
     // keep std::string typed member the last for cross cxxabi compatibility
     std::string s;

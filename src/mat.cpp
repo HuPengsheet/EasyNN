@@ -25,7 +25,7 @@ namespace easynn{
         }
         if(data)
         {
-            refcount=(int*)(int(data)+totalsize);
+            refcount=(int*)((unsigned char *)data+totalsize);
             *refcount=1;
         }
             
@@ -52,7 +52,7 @@ namespace easynn{
         }
         if(data)
         {
-            refcount=(int*)(int(data)+totalsize);
+            refcount=(int*)((unsigned char *)data+totalsize);
             *refcount=1;
         }          
 
@@ -77,12 +77,15 @@ namespace easynn{
         }
         if(data)
         {
-            refcount=(int*)(int(data)+totalsize);
+            refcount=(int*)((unsigned char *)data+totalsize);
             *refcount=1;
         }         
     }
 
+    Mat::~Mat()
+    {
 
+    }
     Mat::Mat():dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
     {
         
@@ -101,7 +104,7 @@ namespace easynn{
         Mat::create(w,h,c,_elemsize);
     }
 
-    int Mat::is_empty()
+    int Mat::is_empty () const
     {
         if(w<0)
             return 1;
