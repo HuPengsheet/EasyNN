@@ -9,6 +9,7 @@
 #include <vector>
 #include <functional>
 #include <map>
+#include "mat.h"
 
 #define QTEST_EXPECT(x, y, cond) \
     if (!((x)cond(y))) \
@@ -319,37 +320,37 @@ private:
     int qtest_mark_##set##_##name = TestEntity::get_instance().add(#set, #name, qtest_##set##_##name, #set "." #name); \
     void qtest_##set##_##name(int* qtest_current_fail_cnt) \
 
-TEST(c, 1)
-{
-    EXPECT_EQ(1, 1);
-}
-TEST(c, 2)
-{
-    EXPECT_EQ(2, 3);
-}
+// TEST(c, 1)
+// {
+//     EXPECT_EQ(1, 1);
+// }
+// TEST(c, 2)
+// {
+//     EXPECT_EQ(2, 3);
+// }
 
-TEST(cd, 1)
-{
-    EXPECT_NE(2, 3);
-}
-TEST(cd, 2)
-{
-    EXPECT_NE(2, 2);
-}
+// TEST(cd, 1)
+// {
+//     EXPECT_NE(2, 3);
+// }
+// TEST(cd, 2)
+// {
+//     EXPECT_NE(2, 2);
+// }
 
-TEST(ce, 1)
-{
-    EXPECT_LE(2, 3);
-}
-TEST(ce, 2)
-{
-    EXPECT_LE(2, 2);
-}
+// TEST(ce, 1)
+// {
+//     EXPECT_LE(2, 3);
+// }
+// TEST(ce, 2)
+// {
+//     EXPECT_LE(2, 2);
+// }
 
-TEST(f, 1)
-{
-    EXPECT_LT(2, 5);
-}
+// TEST(f, 1)
+// {
+//     EXPECT_LT(2, 5);
+// }
 
 void InitQTest()
 {
@@ -371,13 +372,15 @@ int RUN_ALL_TESTS()
 #define QTEST_FILTER(filter_str) \
     TestEntity::get_instance().set_filter(filter_str)
 
-int main()
-{
-    InitQTest();
-    QTEST_FILTER("c*.1");
-    //QTEST_FILTER("f?.1");
-    return RUN_ALL_TESTS();
-}
+// int main()
+// {
+//     InitQTest();
+//     QTEST_FILTER("c*.1");
+//     //QTEST_FILTER("f?.1");
+//     return RUN_ALL_TESTS();
+// }
+
+
 
 
 #endif

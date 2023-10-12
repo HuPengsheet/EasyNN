@@ -12,8 +12,7 @@ static  size_t alignSize(size_t sz, int n)
     return (sz + n - 1) & -n;
 }
 
-//fastMalloc���Ե��Ƕ����64�ֽڵ�ַ��ͬʱҲ��������64�ֽڵĿռ�
-//�������Ŀռ�,һ������Ϊ�˰�ȫ��һ������������ʹ�õ�ʱ������������mat�����ü���
+
 static void* fastMalloc(size_t size)
 {   
     void * ptr = 0;

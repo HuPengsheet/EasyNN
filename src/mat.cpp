@@ -5,7 +5,7 @@
 namespace easynn{
 
     
-    void Mat::create(size_t _w,size_t _elemsize)
+    void Mat::create(int _w,size_t _elemsize)
     {
         dims=1;
         w=_w;
@@ -32,7 +32,7 @@ namespace easynn{
 
 
     }
-    void Mat::create(size_t _w,size_t _h,size_t _elemsize)
+    void Mat::create(int _w,int _h,size_t _elemsize)
     {
         dims=2;
         w=_w;
@@ -57,7 +57,7 @@ namespace easynn{
         }          
 
     }
-    void Mat::create(size_t _w,size_t _h,size_t _c,size_t _elemsize)
+    void Mat::create(int _w,int _h,int _c,size_t _elemsize)
     {   
         dims=3;
         w=_w;
@@ -88,18 +88,24 @@ namespace easynn{
         
     }
     
-    Mat::Mat(size_t w,size_t _elemsize):dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
+    Mat::Mat(int w,size_t _elemsize):dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
     {
         Mat::create(w,_elemsize);
     }
-    Mat::Mat(size_t w,size_t h,size_t _elemsize):dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
+    Mat::Mat(int w,int h,size_t _elemsize):dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
     {
         Mat::create(w,h,_elemsize);
     }
-    Mat::Mat(size_t w,size_t h,size_t c,size_t _elemsize):dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
+    Mat::Mat(int w,int h,int c,size_t _elemsize):dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
     {
         Mat::create(w,h,c,_elemsize);
     }
 
+    int Mat::is_empty()
+    {
+        if(w<0)
+            return 1;
+        return 0;
+    }
 
 }
