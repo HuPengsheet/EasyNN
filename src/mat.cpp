@@ -4,7 +4,26 @@
 
 namespace easynn{
 
-    
+    int Mat::is_empty () const
+    {
+        if(w<0)
+            return 1;
+        return 0;
+    }
+    int Mat::total() const
+    {
+        return cstep*c * elemsize;
+    }
+
+    void Mat::add_ref()
+    {
+        if(refcount)
+        {
+            *refcount+=1;
+        }
+    }
+
+
     void Mat::create(int _w,size_t _elemsize)
     {
         dims=1;
@@ -13,7 +32,7 @@ namespace easynn{
         c=1;
         cstep = _w;
         elemsize = _elemsize;
-        size_t totalsize = alignSize(cstep * elemsize, 4);
+        size_t totalsize = alignSize(total(), 4);
 
         if(totalsize>0)
         {
@@ -40,7 +59,7 @@ namespace easynn{
         c=1;
         cstep = _w*_h;
         elemsize = _elemsize;
-        size_t totalsize = alignSize(cstep * elemsize, 4);
+        size_t totalsize = alignSize(total(), 4);
 
         if(totalsize>0)
         {
@@ -65,7 +84,7 @@ namespace easynn{
         c=_w;
         elemsize = _elemsize;
         cstep = alignSize((size_t)w * h * elemsize, 16) / elemsize;
-        size_t totalsize = alignSize(cstep*c * elemsize, 4);
+        size_t totalsize = alignSize(total(), 4);
         
         if(totalsize>0)
         {
@@ -104,11 +123,9 @@ namespace easynn{
         Mat::create(w,h,c,_elemsize);
     }
 
-    int Mat::is_empty () const
+    Mat::Mat(const Mat& m):dims(m.dims),c(m.c),h(m.h),w(m.w),cstep(m.cstep),data(m.data),refcount(m.refcount),elemsize(m.elemsize)
     {
-        if(w<0)
-            return 1;
-        return 0;
+        add_ref();
     }
 
 }

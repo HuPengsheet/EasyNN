@@ -21,14 +21,17 @@ public:
     void create(int _w,int _h,size_t _elemsize=4u); 
     void create(int _w,int _h,int _c,size_t _elemsize=4u); 
 
-    //拷贝构造函数
+    //拷贝构造函数,浅拷贝，refcount加1
     Mat(const Mat& m);
 
     //运算重载
     Mat& operator=(const Mat& m);
     ~Mat();
 
+    void add_ref();
     int is_empty () const;
+    int total() const;
+    
 
     size_t dims;     //数据的维度 0 or 1 or 2 or 3
     int c;           
