@@ -2,21 +2,20 @@
 #define EASYNN_MAT_H
 
 #include<stddef.h>
-
+#include<vector>
 namespace easynn{
 
 class Mat
 {
 public:
-    //各种构造函数
-    //
 
-    //普通构造函数
     Mat();
     Mat(int _w,size_t _elemsize=4u); 
     Mat(int _w,int _h,size_t _elemsize=4u); 
     Mat(int _w,int _h,int _c,size_t _elemsize=4u); 
     Mat(int _w,int _h,int _d,int _c,size_t _elemsize=4u); 
+    Mat(const Mat& m);
+    Mat& operator=(const Mat& m);
 
     void create(int _w,size_t _elemsize=4u); 
     void create(int _w,int _h,size_t _elemsize=4u); 
@@ -25,23 +24,22 @@ public:
 
     void fill(int x);
     void fill(float x);
-    void fillFromArray(int * a);
-    void fillFromArray(int ** a);
-    void fillFromArray(int *** a);
-    void fillFromArray(float * a);
-    void fillFromArray(float ** a);
-    void fillFromArray(float *** a);
-    //拷贝构造函数,浅拷贝，refcount加1
-    Mat(const Mat& m);
 
-    //运算符重载
-    Mat& operator=(const Mat& m);
+    void fillFromArray(std::vector<int> x);
+    void fillFromArray(std::vector<std::vector<int>> x);
+    void fillFromArray(std::vector<std::vector<std::vector<int>>> x);
+    void fillFromArray(std::vector<float> x);
+    void fillFromArray(std::vector<std::vector<float>> x);
+    void fillFromArray(std::vector<std::vector<std::vector<float>>> x);
+
+    
     ~Mat();
-
+    
     void clean();
     void add_ref();
     int isEmpty () const;
     int total() const;
+    Mat clone();
     
 
     size_t dims;     //数据的维度 0 or 1 or 2 or 3 or 4
