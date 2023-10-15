@@ -25,10 +25,16 @@ public:
 
     void fill(int x);
     void fill(float x);
+    void fillFromArray(int * a);
+    void fillFromArray(int ** a);
+    void fillFromArray(int *** a);
+    void fillFromArray(float * a);
+    void fillFromArray(float ** a);
+    void fillFromArray(float *** a);
     //拷贝构造函数,浅拷贝，refcount加1
     Mat(const Mat& m);
 
-    //运算符号重载
+    //运算符重载
     Mat& operator=(const Mat& m);
     ~Mat();
 
@@ -38,7 +44,7 @@ public:
     int total() const;
     
 
-    size_t dims;     //数据的维度 0 or 1 or 2 or 3
+    size_t dims;     //数据的维度 0 or 1 or 2 or 3 or 4
     int c;     
     int d;      
     int h;

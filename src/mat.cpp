@@ -50,6 +50,55 @@ void Mat::fill(int x)
     }   
 }
 
+void Mat::fill(float x)
+{
+    if(isEmpty())
+    {
+        return ;
+    } 
+    for(int i=0;i<c;i++){
+        float *ptr = (float *)((char *)data+cstep*i);
+        for(int z=0;z<d;z++){
+            for(int j=0;j<h;j++){
+                for(int k=0;k<w;k++){
+                    ptr[k]=x;
+                }
+                ptr = ptr+w;
+            }
+        }
+    }   
+}
+void Mat::fillFromArray(int * x)
+{
+    
+    if(dims!=1)
+    {
+        return ;
+    }
+    if(sizeof(x)/sizeof(x[0])!=w)
+    {   
+        return ;
+    }
+
+    for(int i=0;i<c;i++){
+        float *ptr = (float *)((char *)data+cstep*i);
+        for(int z=0;z<d;z++){
+            for(int j=0;j<h;j++){
+                for(int k=0;k<w;k++){
+                    printf("%d\n",x[k]);
+                    ptr[k]=x[k];
+                }
+                ptr = ptr+w;
+            }
+        }
+    }   
+    
+}
+// void fillFromArray(int **);
+// void fillFromArray(int ***);
+// void fillFromArray(float *);
+// void fillFromArray(float **);
+// void fillFromArray(float ***);
 void Mat::create(int _w,size_t _elemsize)
 {
     dims=1;

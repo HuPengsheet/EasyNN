@@ -57,12 +57,27 @@ TEST(Mat, refcount)
 }
 
 TEST(Mat, fill)
-{
-    easynn::Mat m1(3,4);
+{   
+    easynn::Mat m1;
+    easynn::Mat m2(3);
+    easynn::Mat m3(3,4);
+    easynn::Mat m4(3,4,2);
+    easynn::Mat m5(3,4,2,2);
     m1.fill(2);
+    m2.fill(2.2f);
+    m3.fill(2);
+    m4.fill(2);
+    m5.fill(2.2f);
+    //printMat(m3);
+}
+TEST(Mat,fillFromArray)
+{   
+    easynn::Mat m1(5);
+    int array[]={0,1,2,3,4};
+    m1.fillFromArray(array);
+    printf("***%d\n",sizeof(array));
     printMat(m1);
 }
-
 
 int main()
 {

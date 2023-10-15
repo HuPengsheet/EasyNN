@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include"mat.h"
 
-//��ӡMat
+//Print Mat
 void printMat(const easynn::Mat& m)
 {
     if(m.isEmpty())
