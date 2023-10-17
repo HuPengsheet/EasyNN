@@ -4,7 +4,7 @@
 #include"ir.h"
 namespace easynn {
     
-class NetPrivate;
+
 class Net
 {
 public:
