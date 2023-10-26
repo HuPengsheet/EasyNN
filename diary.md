@@ -30,3 +30,31 @@
     Mat类基本已经写好了，各种构造函数，引用计数，内存管理与释放，这些都写好了
     对应的单元测试也都写了，其他的什么reshape，归一化这些后面再写吧
     
+
+
+##10月26日      
+    导师安排去出差了，10来天没更新了。昨天刚回来。
+    这段时间构思了一下架构，准备先把layer写了，然后再写net类。
+
+
+
+
+需要写的算子：
+   Input
+   Output
+
+   Conv2d
+   Linear
+
+   MaxPool2d 
+   Upsample
+   AdaptiveAvgPool2d
+   
+   flatten 
+   view
+   permute
+   Expression
+   cat
+
+   silu
+   ReLU
