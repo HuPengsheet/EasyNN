@@ -6,5 +6,6 @@ project(test)
 set(TEST_SRC  ${TEST}/test.cpp)
 
 
-add_executable(run_test ${TEST_SRC} ${SRC})
+add_executable(run_test ${TEST_SRC} ${SRC} ${LAYERS_SRC})
 target_include_directories(run_test PUBLIC ${INCLUDE})
+

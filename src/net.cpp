@@ -1,4 +1,6 @@
 #include"net.h"
+#include"layer.h"
+#include"register_layers.h"
 #include<iostream>
 
 namespace easynn{
@@ -64,6 +66,9 @@ int Net::loadParam(const char * param_path,const char * bin_path)
             layers.push_back(layer->name);
         }
     }
+    layer_factory factory= layes_factory[0].second;
+    Layer* l1 = factory();
+    l1->forward();
     return re;
 }
 

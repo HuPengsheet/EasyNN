@@ -19,7 +19,7 @@ public:
     int forwarLayer(std::string layer_name);
 
 
-    std::vector<easynn::Mat> blob_mat;
+    std::vector<Mat> blob_mat;
     std::vector<std::string> layers;
     
     size_t layer_num;

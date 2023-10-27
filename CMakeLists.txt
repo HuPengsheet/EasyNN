@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)  # C++ 11 是强制要求，不会衰退至�
 set(CMAKE_CXX_EXTENSIONS OFF)  # 禁止使用编译器特有扩展
 
 file(GLOB SRC src/*.cpp)
+file(GLOB LAYERS_SRC src/layers/*.cpp)
 set(INCLUDE ${CMAKE_SOURCE_DIR}/src)
 set(TEST ${CMAKE_SOURCE_DIR}/test)
 
