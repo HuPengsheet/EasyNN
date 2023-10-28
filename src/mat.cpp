@@ -319,7 +319,7 @@ Mat::~Mat()
 {
     clean();
 }
-Mat::Mat():dims(0),c(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
+Mat::Mat():dims(0),c(0),d(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
 {
     
 }

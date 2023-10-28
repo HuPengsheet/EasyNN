@@ -18,10 +18,15 @@ namespace easynn{
     {
         return 0;
     }
-    int Layer::forward()
+    int Layer::forward(Mat& input,Mat& output)
     {
         return 0;
     }
+    int Layer::forward(std::vector<Mat>& input,std::vector<Mat>& output)
+    {
+        return 0;
+    }
+
     int Layer::forwardInplace()
     {
         return 0;

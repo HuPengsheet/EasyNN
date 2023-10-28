@@ -2,7 +2,7 @@
 #define EASYNN_LAYER_H
 #include<vector>
 #include<string>
-
+#include"mat.h"
 namespace easynn{
 
 class Layer{
@@ -12,15 +12,15 @@ public:
     virtual ~Layer();
     virtual int loadParam();
     virtual int loadModel();
-    virtual int forward();
+    virtual int forward(Mat& input,Mat& output);
+    virtual int forward(std::vector<Mat>& input,std::vector<Mat>& output);
     virtual int forwardInplace();
 
 public:
 
     // one input and one output blob
     bool one_blob_only;
-    // support inplace inference
-    bool support_inplace;
+
 public:
     // custom user data
     void* userdata;
