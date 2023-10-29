@@ -10,7 +10,7 @@ class AdaptivePool: public Layer
 {
 public:
     AdaptivePool();
-    virtual int forward(Mat& input,Mat& output);
+    virtual int forward(const Mat& input,Mat& output,const Optional& op);
 };
 
 }//namespace

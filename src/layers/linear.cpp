@@ -9,7 +9,7 @@ Linear::Linear()
     one_blob_only = true;
 }
 
-int Linear::forward(Mat& input,Mat& output)
+int Linear::forward(const Mat& input,Mat& output,const Optional& op)
 {
     output = input.clone();
     std::cout<<"Linear forward"<<std::endl;

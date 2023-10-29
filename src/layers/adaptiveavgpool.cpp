@@ -8,7 +8,7 @@ AdaptivePool::AdaptivePool()
     one_blob_only=true;
 }
 
-int AdaptivePool::forward(Mat& input,Mat& output)
+int AdaptivePool::forward(const Mat& input,Mat& output,const Optional& op)
 {
     output = input.clone();
 

@@ -1,18 +1,17 @@
-#ifndef EASYNN_LINEAR_H
-#define EASYNN_LINEAR_H
+#ifndef EASYNN_UPSAMPLE_H
+#define EASYNN_UPSAMPLE_H
 
 #include"layer.h"
 #include"mat.h"
 namespace easynn{
 
 
-class Linear: public Layer
+class Upsample: public Layer
 {
 public:
-    Linear();
+    Upsample();
     virtual int forward(const Mat& input,Mat& output,const Optional& op);
 };
 
 }//namespace
-
 #endif

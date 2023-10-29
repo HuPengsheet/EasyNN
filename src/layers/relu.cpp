@@ -1,4 +1,4 @@
-#include"iostream"
+#include<iostream>
 #include"relu.h"
 
 
@@ -8,7 +8,7 @@ Relu::Relu()
 {
     one_blob_only = true;
 }
-int Relu::forward(Mat& input,Mat& output)
+int Relu::forward(const Mat& input,Mat& output,const Optional& op)
 {
     output = input.clone();
     std::cout<<"Relu forward"<<std::endl;

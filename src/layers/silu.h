@@ -1,18 +1,17 @@
-#ifndef EASYNN_LINEAR_H
-#define EASYNN_LINEAR_H
+#ifndef EASYNN_SILU_H
+#define EASYNN_SILU_H
 
 #include"layer.h"
 #include"mat.h"
 namespace easynn{
 
 
-class Linear: public Layer
+class Silu: public Layer
 {
 public:
-    Linear();
+    Silu();
     virtual int forward(const Mat& input,Mat& output,const Optional& op);
 };
 
 }//namespace
-
 #endif

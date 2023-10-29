@@ -10,7 +10,7 @@ class Relu: public Layer
 {
 public:
     Relu();
-    virtual int forward(Mat& input,Mat& output);
+    virtual int forward(const Mat& input,Mat& output,const Optional& op);
 };
 
 }//namespace

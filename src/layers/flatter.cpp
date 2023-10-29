@@ -9,7 +9,7 @@ Flatten::Flatten()
     one_blob_only = true;
 }
 
-int Flatten::forward(Mat& input,Mat& output)
+int Flatten::forward(const Mat& input,Mat& output,const Optional& op)
 {
     output = input.clone();
     std::cout<<"Flatten forward"<<std::endl;

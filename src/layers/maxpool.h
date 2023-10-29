@@ -10,7 +10,7 @@ class MaxPool: public Layer
 {
 public:
     MaxPool();
-    virtual int forward(Mat& input,Mat& output);
+    virtual int forward(const Mat& input,Mat& output,const Optional& op);
 };
 
 }//namespace
