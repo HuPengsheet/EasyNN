@@ -139,7 +139,8 @@ int Net::loadModel(const char * param_path,const char * bin_path)
                 blob.producer = i;
             }
             layer->loadParam(op->params);
-
+            if(layer_type=="Conv2d")
+            std::cout<<op->attrs["weight"].data.size()<<std::endl;
             layers[i]= layer;
         }
     }

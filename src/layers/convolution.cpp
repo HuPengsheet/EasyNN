@@ -13,11 +13,6 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
 {
     output=input.clone();
     std::cout<<"Convolution forward"<<std::endl;
-    std::cout<<padding_mode<<std::endl;
-    for(auto k:kernel_size)
-    {
-        std::cout<<k<<std::endl;
-    }
     return 0;
 }
 

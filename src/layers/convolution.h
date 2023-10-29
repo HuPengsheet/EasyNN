@@ -14,7 +14,7 @@ public:
 
     virtual int forward(const Mat& input,Mat& output,const Optional& op);
     virtual int loadParam(const std::map<std::string, pnnx::Parameter> params);
-    virtual int loadBin();
+    
 
 public:
 
