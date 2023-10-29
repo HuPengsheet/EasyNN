@@ -2,7 +2,10 @@
 #define EASYNN_LAYER_H
 #include<vector>
 #include<string>
+#include<map>
 #include"mat.h"
+#include"optional.h"
+#include"ir.h"
 namespace easynn{
 
 class Layer{
@@ -10,10 +13,10 @@ class Layer{
 public:
     Layer();
     virtual ~Layer();
-    virtual int loadParam();
-    virtual int loadModel();
-    virtual int forward(Mat& input,Mat& output);
-    virtual int forward(std::vector<Mat>& input,std::vector<Mat>& output);
+    virtual int loadParam(const std::map<std::string, pnnx::Parameter> params);
+    virtual int loadBin();
+    virtual int forward(const Mat& input,Mat& output,const Optional& op);
+    virtual int forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Optional& op);
     virtual int forwardInplace();
 
 public:

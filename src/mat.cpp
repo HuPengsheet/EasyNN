@@ -1,8 +1,8 @@
-#include"mat.h"
-#include"allocator.h"
 #include<stdio.h>
 #include<vector>
 #include<string.h>
+#include"mat.h"
+#include"allocator.h"
 namespace easynn{
 
 
@@ -370,7 +370,7 @@ Mat& Mat::operator=(const Mat& m)
     return *this;
 }
 
-Mat Mat::clone()
+Mat Mat::clone() const
 {
     if (isEmpty())
         return Mat();

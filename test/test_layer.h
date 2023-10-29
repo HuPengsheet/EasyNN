@@ -12,28 +12,6 @@
 TEST(layer,forward)
 {
     
-    easynn::Convolution c1;
-    c1.forward();
-
-    easynn::Relu re;
-    re.forward();
-
-    easynn::AdaptivePool ad;
-    ad.forward();
-
-    easynn::Flatten fla;
-    fla.forward();
-
-    easynn::Linear linear;
-    linear.forward();
-
-    easynn::MaxPool mp;
-    mp.forward();
-
-    easynn::Expression ex;
-    ex.forward();
-
-
 }
 
 

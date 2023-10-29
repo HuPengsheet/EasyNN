@@ -10,19 +10,19 @@ namespace easynn{
     {
         
     }
-    int Layer::loadParam()
+    int Layer::loadParam(const std::map<std::string, pnnx::Parameter> params)
     {
         return 0;
     }
-    int Layer::loadModel()
+    int Layer::loadBin()
     {
         return 0;
     }
-    int Layer::forward(Mat& input,Mat& output)
+    int Layer::forward(const Mat& input,Mat& output,const Optional& op)
     {
         return 0;
     }
-    int Layer::forward(std::vector<Mat>& input,std::vector<Mat>& output)
+    int Layer::forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Optional& op)
     {
         return 0;
     }

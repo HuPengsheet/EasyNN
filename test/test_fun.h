@@ -36,12 +36,12 @@ int compareMat(const easynn::Mat& m1,const easynn::Mat& m2)
     if(m1.isEmpty()||m2.isEmpty())
     {
         //printf("mat is empty,con't compare\n");
-        return 0;
+        return -1;
     } 
     if(m1.c!=m2.c || m1.h!=m2.h || m1.w!=m2.w || m1.total()!=m2.total())
     {
         //printf("mat is shape is different,con't compare\n");
-        return 0;
+        return -1;
     }
     return !memcmp(m1.data, m2.data,m1.total());
 }

@@ -39,7 +39,7 @@ public:
     void add_ref();
     int isEmpty () const;
     int total() const;
-    Mat clone();
+    Mat clone() const;
     
 
     size_t dims;     //数据的维度 0 or 1 or 2 or 3 or 4
