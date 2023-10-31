@@ -13,8 +13,8 @@ class Layer{
 public:
     Layer();
     virtual ~Layer();
-    virtual int loadParam(const std::map<std::string, pnnx::Parameter> params);
-    virtual int loadBin();
+    virtual int loadParam(std::map<std::string, pnnx::Parameter>& params);
+    virtual int loadBin(std::vector<char>& data);
     virtual int forward(const Mat& input,Mat& output,const Optional& op);
     virtual int forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Optional& op);
     virtual int forwardInplace();

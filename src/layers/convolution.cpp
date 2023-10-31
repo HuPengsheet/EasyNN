@@ -16,7 +16,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
     return 0;
 }
 
-int Convolution::loadParam(std::map<std::string, pnnx::Parameter> params)
+int Convolution::loadParam(std::map<std::string, pnnx::Parameter>& params)
 {
     use_bias = params["bias"].b;
     groups = params["groups"].i;
@@ -28,6 +28,19 @@ int Convolution::loadParam(std::map<std::string, pnnx::Parameter> params)
     dilation.assign(params["dilation"].ai.begin(),params["dilation"].ai.end());    
     kernel_size.assign(params["kernel_size"].ai.begin(),params["kernel_size"].ai.end()); 
     stride.assign(params["stride"].ai.begin(),params["stride"].ai.end());   
+    return 0;   
+}
+
+int Convolution::loadBin(std::vector<char>& data)
+{
+    size_t kernel_max = kernel_size[0]*kernel_size[1];
+    size_t data_size = in_channels*kernel_max*out_channels;
+    int w= kernel_size[0];
+    int h= kernel_size[1];
+    int d= in_channels;
+    int c= out_channels;
+    weight.create(w,h,d,c);
+    for()
     return 0;   
 }
 
