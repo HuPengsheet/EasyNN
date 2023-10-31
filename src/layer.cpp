@@ -10,11 +10,11 @@ namespace easynn{
     {
         
     }
-    int Layer::loadParam(const std::map<std::string, pnnx::Parameter> params)
+    int Layer::loadParam(std::map<std::string, pnnx::Parameter>& params)
     {
         return 0;
     }
-    int Layer::loadBin()
+    int Layer::loadBin(std::vector<char>& data)
     {
         return 0;
     }
