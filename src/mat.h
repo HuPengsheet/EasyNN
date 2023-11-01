@@ -15,7 +15,11 @@ public:
     Mat(int _w,int _h,int _c,size_t _elemsize=4u); 
     Mat(int _w,int _h,int _d,int _c,size_t _elemsize=4u); 
     Mat(const Mat& m);
+
+        
+
     Mat& operator=(const Mat& m);
+    float& operator[](size_t index);    
 
     void create(int _w,size_t _elemsize=4u); 
     void create(int _w,int _h,size_t _elemsize=4u); 

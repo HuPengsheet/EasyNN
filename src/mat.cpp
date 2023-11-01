@@ -370,6 +370,11 @@ Mat& Mat::operator=(const Mat& m)
     return *this;
 }
 
+float& Mat::operator[](size_t index)
+{
+    return ((float*)data)[index];
+}
+
 Mat Mat::clone() const
 {
     if (isEmpty())
