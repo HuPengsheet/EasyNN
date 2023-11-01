@@ -14,15 +14,19 @@ void printMat(const easynn::Mat& m)
         return ;
     } 
     printf("d=%d,c=%d,h=%d,w=%d \n",m.d,m.c,m.h,m.w);
-    for(int i=0;i<m.c;i++){
-        float *ptr = (float *)((char *)m.data+m.cstep*i);
-        for(int d=0;d<m.d;d++){
-            for(int j=0;j<m.h;j++){
-                for(int k=0;k<m.w;k++){
-                    printf("%f ",ptr[k]);
+    for (int q=0; q<m.c; q++)
+    {
+        float* ptr = m.channel(q);
+        for (int z=0; z<m.d; z++)
+        {
+            for (int y=0; y<m.h; y++)
+            {
+                for (int x=0; x<m.w; x++)
+                {
+                    printf("%f ", ptr[x]);
                 }
+                ptr += m.w;
                 printf("\n");
-                ptr = ptr+m.w;
             }
             printf("\n");
         }

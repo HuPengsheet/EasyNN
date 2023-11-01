@@ -23,8 +23,8 @@ TEST(Mat, compare_mat)
     easynn::Mat m4;
     EXPECT_EQ(compareMat(m1,m2), 1);
     EXPECT_EQ(compareMat(m1,m2), 1);
-    EXPECT_EQ(compareMat(m1,m3), 0);
-    EXPECT_EQ(compareMat(m4,m3), 0);
+    EXPECT_EQ(compareMat(m1,m3), -1);
+    EXPECT_EQ(compareMat(m4,m3), -1);
 }
 
 TEST(Mat, refcount)
@@ -84,10 +84,12 @@ TEST(Mat,fillFromArray)
     m1.fillFromArray(x1);
     m2.fillFromArray(x2);
     m3.fillFromArray(x3);
-    // printMat(m1);
-    // printMat(m2);
-    // printMat(m3);
+    printMat(m1);
+    printMat(m2);
+    printMat(m3);
+    //printMat(m4);
 }
+
  
 TEST(Mat,clone)
 {   
@@ -110,4 +112,22 @@ TEST(Mat,clone)
     EXPECT_EQ(compareMat(m2,m5), 1);
     EXPECT_EQ(compareMat(m3,m6), 1);
 
+}
+
+TEST(Mat,channels)
+{   
+    easynn::Mat m1(5);
+    easynn::Mat m2(3,5);
+    easynn::Mat m3(2,3,2);
+    std::vector<int> x1={1,2,3,4,5};
+    std::vector<std::vector<int>> x2={{1,2,2},{2,98,100},{3,4,5},{31,4,52},{3,43,59}};
+    std::vector<std::vector<std::vector<int>>> x3={{{1,2},{98,100},{4,5}},{{5,2},{99,100},{4,51}}};
+    m1.fillFromArray(x1);
+    m2.fillFromArray(x2);
+    m3.fillFromArray(x3);
+    
+    float * ptr = m1.channel(0);
+    EXPECT_EQ(ptr[0],1);
+    EXPECT_EQ(ptr[1],2);
+    EXPECT_EQ(ptr[2],3);
 }
