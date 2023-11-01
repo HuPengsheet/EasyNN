@@ -16,7 +16,11 @@ public:
     Mat(int _w,int _h,int _d,int _c,size_t _elemsize=4u); 
     Mat(const Mat& m);
 
-        
+    Mat(int _w,void* data,size_t _elemsize=4u); 
+    Mat(int _w,int _h,void* data,size_t _elemsize=4u); 
+    Mat(int _w,int _h,int _c,void* data,size_t _elemsize=4u); 
+    Mat(int _w,int _h,int _d,int _c,void* data,size_t _elemsize=4u); 
+
 
     Mat& operator=(const Mat& m);
     float& operator[](size_t index);    
@@ -41,6 +45,7 @@ public:
     
     void clean();
     void add_ref();
+    Mat Mat::channel(int _c);
     int isEmpty () const;
     int total() const;
     Mat clone() const;

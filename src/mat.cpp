@@ -41,6 +41,15 @@ void Mat::add_ref()
     }
 }
 
+Mat Mat::channel(int _c)
+{
+    Mat m(w, h, d, (unsigned char*)data + cstep * _c * elemsize, elemsize);
+    m.dims = dims - 1;
+    if (dims == 4)
+        m.cstep = (size_t)w * h;
+    return m;
+}
+
 void Mat::fill(int x)
 {
     if(isEmpty())
@@ -343,6 +352,22 @@ Mat::Mat(int _w,int _h,int _d,int _c,size_t _elemsize):dims(0),c(0),d(0),h(0),w(
 Mat::Mat(const Mat& m):dims(m.dims),c(m.c),d(m.d),h(m.h),w(m.w),cstep(m.cstep),data(m.data),refcount(m.refcount),elemsize(m.elemsize)
 {
     add_ref();
+}
+Mat::Mat(int _w,void* data,size_t _elemsize):dims(1),c(1),d(1),h(1),w(_w),data(data),refcount(0),elemsize(_elemsize)
+{
+    cstep = _w;
+}
+Mat::Mat(int _w,int _h,void* data,size_t _elemsize):dims(2),c(1),d(1),h(_h),w(_w),data(data),refcount(0),elemsize(_elemsize)
+{
+    cstep = _w*_h;
+} 
+Mat::Mat(int _w,int _h,int _c,void* data,size_t _elemsize):dims(3),c(_c),d(1),h(_h),w(_w),data(data),refcount(0),elemsize(_elemsize)
+{
+    cstep=alignSize((size_t)w * h * elemsize, 16) / elemsize;
+}
+Mat::Mat(int _w,int _h,int _d,int _c,void* data,size_t _elemsize):dims(4),c(_c),d(_d),h(_h),w(_w),data(data),refcount(0),elemsize(_elemsize)
+{
+    cstep = alignSize((size_t)w*h*d*elemsize, 16) / elemsize;
 }
 
 Mat& Mat::operator=(const Mat& m)
