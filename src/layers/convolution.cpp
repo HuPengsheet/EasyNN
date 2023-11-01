@@ -3,7 +3,6 @@
 #include"mat.h"
 namespace easynn{
 
-
 Convolution::Convolution()
 {
     one_blob_only=true;
@@ -31,16 +30,44 @@ int Convolution::loadParam(std::map<std::string, pnnx::Parameter>& params)
     return 0;   
 }
 
-int Convolution::loadBin(std::vector<char>& data)
-{
+int Convolution::loadBin(std::map<std::string, pnnx::Attribute>& attrs)
+{   
+
+    float* weight_data = (float*)(&attrs["weight"].data[0]);
     size_t kernel_max = kernel_size[0]*kernel_size[1];
+    size_t kernel_channels = kernel_size[0]*kernel_size[1]*in_channels;
     size_t data_size = in_channels*kernel_max*out_channels;
     int w= kernel_size[0];
     int h= kernel_size[1];
     int d= in_channels;
     int c= out_channels;
     weight.create(w,h,d,c);
-    for()
+    for(int i=0;i<out_channels;i++)
+    {
+        float* ptr=weight.channel(i);
+        for(int j=0;j<in_channels;j++)
+        {
+            for(int k=0;k<h;k++)
+            {
+               for(int m=0;m<w;m++)
+               {
+                ptr[m]=weight_data[i*kernel_channels+j*kernel_max+k*h+m];
+               }
+                ptr = ptr+w;
+            }
+        }
+    }
+
+
+    if(use_bias)
+    {
+        float* weight_data = (float*)(&attrs["bias"].data[0]);
+        bias.create(out_channels);
+        for(int i=0;i<out_channels;i++)
+        {
+            bias[i]=weight_data[i];
+        }
+    }
     return 0;   
 }
 
