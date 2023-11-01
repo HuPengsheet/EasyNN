@@ -14,7 +14,7 @@ namespace easynn{
     {
         return 0;
     }
-    int Layer::loadBin(std::vector<char>& data)
+    int Layer::loadBin(std::map<std::string, pnnx::Attribute>& attrs)
     {
         return 0;
     }

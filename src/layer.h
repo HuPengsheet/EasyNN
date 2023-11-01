@@ -14,7 +14,7 @@ public:
     Layer();
     virtual ~Layer();
     virtual int loadParam(std::map<std::string, pnnx::Parameter>& params);
-    virtual int loadBin(std::vector<char>& data);
+    virtual int loadBin(std::map<std::string, pnnx::Attribute>& attrs);
     virtual int forward(const Mat& input,Mat& output,const Optional& op);
     virtual int forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Optional& op);
     virtual int forwardInplace();
