@@ -139,6 +139,7 @@ int Net::loadModel(const char * param_path,const char * bin_path)
                 blob.producer = i;
             }
             layer->loadParam(op->params);
+            layer->loadBin(op->attrs);
             layers[i]= layer;
         }
     }

@@ -23,8 +23,11 @@ public:
 
 
     Mat& operator=(const Mat& m);
-    float& operator[](size_t index);    
+    float& operator[](size_t index); 
 
+    template<typename T>
+    operator T*();
+ 
     void create(int _w,size_t _elemsize=4u); 
     void create(int _w,int _h,size_t _elemsize=4u); 
     void create(int _w,int _h,int _c,size_t _elemsize=4u); 
@@ -45,7 +48,9 @@ public:
     
     void clean();
     void add_ref();
-    Mat Mat::channel(int _c);
+
+    Mat channel(int _c);
+    Mat channel(int _c)const ;
     int isEmpty () const;
     int total() const;
     Mat clone() const;
@@ -63,6 +68,11 @@ public:
     
 };
 
+template<typename T>
+Mat::operator T*()
+{
+    return (T*)data;
 }
 
+}
 #endif

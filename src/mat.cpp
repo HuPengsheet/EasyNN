@@ -3,6 +3,7 @@
 #include<string.h>
 #include"mat.h"
 #include"allocator.h"
+
 namespace easynn{
 
 
@@ -50,6 +51,15 @@ Mat Mat::channel(int _c)
     return m;
 }
 
+Mat Mat::channel(int _c) const
+{
+    Mat m(w, h, d, (unsigned char*)data + cstep * _c * elemsize, elemsize);
+    m.dims = dims - 1;
+    if (dims == 4)
+        m.cstep = (size_t)w * h;
+    return m;
+}
+
 void Mat::fill(int x)
 {
     if(isEmpty())
@@ -57,7 +67,7 @@ void Mat::fill(int x)
         return ;
     } 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -76,7 +86,7 @@ void Mat::fill(float x)
         return ;
     } 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -100,7 +110,7 @@ void Mat::fillFromArray(std::vector<int> x)
     }
     
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -120,7 +130,7 @@ void Mat::fillFromArray(std::vector<std::vector<int>> x)
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -140,7 +150,7 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<int>>> x)
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -164,7 +174,7 @@ void Mat::fillFromArray(std::vector<float> x)
     }
     
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -184,7 +194,7 @@ void Mat::fillFromArray(std::vector<std::vector<float>> x)
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -204,7 +214,7 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<float>>> x)
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i);
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -399,6 +409,8 @@ float& Mat::operator[](size_t index)
 {
     return ((float*)data)[index];
 }
+
+
 
 Mat Mat::clone() const
 {
