@@ -50,8 +50,11 @@ public:
     void clean();
     void add_ref();
 
+    float* row(int y);
+    float* row(int y) const;
     Mat channel(int _c);
-    Mat channel(int _c)const ;
+    Mat channel(int _c) const ;
+    
     int isEmpty () const;
     int total() const;
     Mat clone() const;

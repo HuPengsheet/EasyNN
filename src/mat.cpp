@@ -42,6 +42,16 @@ void Mat::add_ref()
     }
 }
 
+float* Mat::row(int y)
+{
+    return (float*)((unsigned char*)data + (size_t)w * y * elemsize);
+}
+
+float* Mat::row(int y) const
+{
+    return (float*)((unsigned char*)data + (size_t)w * y * elemsize);
+}
+
 Mat Mat::channel(int _c)
 {
     Mat m(w, h, d, (unsigned char*)data + cstep * _c * elemsize, elemsize);
