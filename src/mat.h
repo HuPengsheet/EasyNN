@@ -39,10 +39,11 @@ public:
     void fillFromArray(std::vector<int> x);
     void fillFromArray(std::vector<std::vector<int>> x);
     void fillFromArray(std::vector<std::vector<std::vector<int>>> x);
+    void fillFromArray(std::vector<std::vector<std::vector<std::vector<int>>>> x);
     void fillFromArray(std::vector<float> x);
     void fillFromArray(std::vector<std::vector<float>> x);
     void fillFromArray(std::vector<std::vector<std::vector<float>>> x);
-
+    void fillFromArray(std::vector<std::vector<std::vector<std::vector<float>>>> x);
     
     ~Mat();
     

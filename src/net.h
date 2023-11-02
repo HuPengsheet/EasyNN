@@ -20,6 +20,7 @@ public:
     int extractBlob(const size_t num,Mat& output);
     int blobforLayer(const size_t blob_num);
     int forwarLayer(int layer_index);
+    int input(int index,const Mat& input);
 
     std::vector<Blob> blobs;
     std::vector<Mat> blob_mats;

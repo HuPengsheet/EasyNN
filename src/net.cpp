@@ -74,6 +74,11 @@ int Net::blobforLayer(const size_t blob_num)
     // std::cout<<blob->producer->name<<std::endl;
 } 
 
+int Net::input(int index,const Mat& input)
+{
+    blob_mats[index]=input;
+}
+
 int Net::extractBlob(const size_t num,Mat& output) 
 {
     Blob& blob = blobs[num];

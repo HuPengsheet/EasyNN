@@ -161,6 +161,25 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<int>>> x)
         }
     }   
 }
+void Mat::fillFromArray(std::vector<std::vector<std::vector<std::vector<int>>>> x)
+{
+    if(dims!=4||isEmpty())
+    {
+        return ;
+    }
+
+    for(int i=0;i<c;i++){
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        for(int z=0;z<d;z++){
+            for(int j=0;j<h;j++){
+                for(int k=0;k<w;k++){
+                    ptr[k]=x[i][z][j][k];
+                }
+                ptr = ptr+w;
+            }
+        }
+    }   
+}
 
 void Mat::fillFromArray(std::vector<float> x)
 {
@@ -219,6 +238,26 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<float>>> x)
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
                     ptr[k]=x[i][j][k];
+                }
+                ptr = ptr+w;
+            }
+        }
+    }   
+}
+
+void Mat::fillFromArray(std::vector<std::vector<std::vector<std::vector<float>>>> x)
+{
+    if(dims!=4||isEmpty())
+    {
+        return ;
+    }
+
+    for(int i=0;i<c;i++){
+        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        for(int z=0;z<d;z++){
+            for(int j=0;j<h;j++){
+                for(int k=0;k<w;k++){
+                    ptr[k]=x[i][z][j][k];
                 }
                 ptr = ptr+w;
             }
