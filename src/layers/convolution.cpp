@@ -10,8 +10,35 @@ Convolution::Convolution()
 
 int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
 {
-    output=input.clone();
-    std::cout<<"Convolution forward"<<std::endl;
+    
+    int input_h = input.h;
+    int input_w = input.w;
+    int out_h = (input_h+2*padding[0]-dilation[0]*(kernel_size[0]-1)-1)/stride[0]+1;
+    int out_w = (input_h+2*padding[1]-dilation[1]*(kernel_size[1]-1)-1)/stride[1]+1;
+    output.create(out_w,out_h,out_channels);
+    
+    size_t kernel_max = kernel_size[0]*kernel_size[1];
+    std::vector<int> kernel_index(kernel_max);
+    {
+        int gap = input_w * dilation[1] - kernel_size[1] * dilation[0];
+        int p=0;
+        int q=0;
+        for(int i=0;i<kernel_size[0];i++)
+        {
+            for(int j=0;j<kernel_size[1];j++)
+            {
+                kernel_index[p] = q;
+                p++;
+                q+=dilation[1];
+            }
+            q +=gap;
+        }
+    }
+
+    
+    // for(auto index:kernel_index) std::cout<<index<<std::endl;
+    // std::cout<<out_h<<"    "<<out_w<<std::endl;
+    
     return 0;
 }
 
@@ -27,6 +54,7 @@ int Convolution::loadParam(std::map<std::string, pnnx::Parameter>& params)
     dilation.assign(params["dilation"].ai.begin(),params["dilation"].ai.end());    
     kernel_size.assign(params["kernel_size"].ai.begin(),params["kernel_size"].ai.end()); 
     stride.assign(params["stride"].ai.begin(),params["stride"].ai.end());   
+
     return 0;   
 }
 
