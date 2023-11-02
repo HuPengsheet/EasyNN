@@ -1,22 +1,52 @@
 #include<iostream>
+#include<stdio.h>
 #include"convolution.h"
 #include"mat.h"
 namespace easynn{
-
+void printMat(const easynn::Mat& m)
+{
+    if(m.isEmpty())
+    {
+        printf("mat is empty\n");
+        return ;
+    } 
+    printf("d=%d,c=%d,h=%d,w=%d \n",m.d,m.c,m.h,m.w);
+    for (int q=0; q<m.c; q++)
+    {
+        float* ptr = m.channel(q);
+        for (int z=0; z<m.d; z++)
+        {
+            for (int y=0; y<m.h; y++)
+            {
+                for (int x=0; x<m.w; x++)
+                {
+                    printf("%f ", ptr[x]);
+                }
+                ptr += m.w;
+                printf("\n");
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+}
 Convolution::Convolution()
 {
     one_blob_only=true;
 }
 
 int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
-{
-    
+{   
+
     int input_h = input.h;
     int input_w = input.w;
     int out_h = (input_h+2*padding[0]-dilation[0]*(kernel_size[0]-1)-1)/stride[0]+1;
     int out_w = (input_h+2*padding[1]-dilation[1]*(kernel_size[1]-1)-1)/stride[1]+1;
     output.create(out_w,out_h,out_channels);
-    
+
+    printf("in_channels:%d, out_channels:%d, input_h:%d ,input_w:%d ,out_h%d ,out_w%d",in_channels,out_channels,input_h,input_w,out_h,out_w);
+
+
     size_t kernel_max = kernel_size[0]*kernel_size[1];
     std::vector<int> kernel_index(kernel_max);
     {
@@ -35,9 +65,39 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
         }
     }
 
-    
-    // for(auto index:kernel_index) std::cout<<index<<std::endl;
-    // std::cout<<out_h<<"    "<<out_w<<std::endl;
+    for(int i=0;i<out_channels;i++)
+    {
+        float* ptr = output.channel(i);
+
+        for(int j=0;j<out_h;j++)
+        {
+            for(int k=0;k<out_w;k++)
+            {
+                float sum=0.f;
+                if(use_bias)
+                    sum=bias[i];
+
+                float* kptr =weight.channel(i);
+                for(int q = 0; q < in_channels; q++)
+                {
+                    const Mat m = input.channel(q);
+                    const float* sptr = m.row(j * stride[1]) + k * stride[0];
+
+                    for(int m=0;m<kernel_max;m++)
+                    {
+                        float val = sptr[kernel_index[m]];
+                        float wt = kptr[m];
+                        sum +=val*wt;
+                    }
+
+                    kptr += kernel_max;
+                }
+
+                ptr[k] = sum;
+            } 
+            ptr +=out_w;
+        }
+    }
     
     return 0;
 }

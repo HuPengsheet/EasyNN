@@ -4,8 +4,8 @@
 #include"net.h"
 #include"mat.h"
 
-std::vector<std::vector<std::vector<std::vector<float>>>> input_data=\
-        {{{{0.2295, 0.2599, 0.6441, 0.0168, 0.7927, 0.3168, 0.9468, 0.2946,
+std::vector<std::vector<std::vector<float>>> input_data=\
+        {{{0.2295, 0.2599, 0.6441, 0.0168, 0.7927, 0.3168, 0.9468, 0.2946,
            0.6510, 0.1767, 0.7645, 0.4612},
           {0.3943, 0.9388, 0.9126, 0.3142, 0.2770, 0.9274, 0.2598, 0.9339,
            0.4860, 0.6099, 0.4828, 0.5948},
@@ -78,10 +78,10 @@ std::vector<std::vector<std::vector<std::vector<float>>>> input_data=\
           {0.6385, 0.9671, 0.6611, 0.5936, 0.0432, 0.7459, 0.0015, 0.7680,
            0.4933, 0.8672, 0.3020, 0.1445},
           {0.0239, 0.0835, 0.6143, 0.0222, 0.7029, 0.3813, 0.3447, 0.4178,
-           0.1323, 0.3780, 0.7844, 0.0424}}}};
+           0.1323, 0.3780, 0.7844, 0.0424}}};
 
-std::vector<std::vector<std::vector<std::vector<float>>>> out_data = \
-        {{{{-0.0754, -0.2237, -0.0262,  0.0480, -0.0727, -0.1734,  0.0382,
+  std::vector<std::vector<std::vector<float>>> out_data = \
+        {{{-0.0754, -0.2237, -0.0262,  0.0480, -0.0727, -0.1734,  0.0382,
            -0.2142, -0.2282, -0.1670},
           {-0.2160, -0.3609, -0.2223, -0.0724, -0.1837, -0.1930,  0.1487,
            -0.0935, -0.1778, -0.4095},
@@ -142,21 +142,22 @@ std::vector<std::vector<std::vector<std::vector<float>>>> out_data = \
           { 0.0199, -0.0608,  0.1309, -0.2531,  0.0080, -0.1949, -0.0918,
            -0.3634,  0.2270, -0.1858},
           {-0.4058, -0.4360, -0.3671, -0.1427, -0.4255, -0.0408, -0.3916,
-           -0.2498, -0.1944, -0.3262}}}};
+           -0.2498, -0.1944, -0.3262}}};
         
 TEST(layer,conv_loadParam)
 {
     easynn::Net net;
-    EXPECT_EQ(net.loadModel("/home/hp/code/github/EasyNN/example/conv.pnnx.param",\
-    "/home/hp/code/github/EasyNN/example/conv.pnnx.bin"),0);
-    easynn::Mat input(12,12,3,1);
-    easynn::Mat output(10,10,3,1);
+    EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/conv.pnnx.param",\
+    "/home/hupeng/code/github/EasyNN/example/conv.pnnx.bin"),0);
+    easynn::Mat input(12,12,3);
+    easynn::Mat output(10,10,3);
     input.fillFromArray(input_data);
     output.fillFromArray(out_data);
 
     net.input(0,input);
     easynn::Mat m;
     net.extractBlob(1,m);
+    EXPECT_EQ(compareMat(m,output),0);
     printMat(m); 
 }
 
