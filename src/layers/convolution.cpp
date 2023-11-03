@@ -1,7 +1,9 @@
 #include<iostream>
 #include<stdio.h>
+#include<string.h>
 #include"convolution.h"
 #include"mat.h"
+
 namespace easynn{
 void printMat(const easynn::Mat& m)
 {
@@ -35,6 +37,70 @@ Convolution::Convolution()
     one_blob_only=true;
 }
 
+void Convolution::copy_make_border_image(const Mat& input,Mat& input_pad)
+{
+    int padding_h  = padding[0];
+    int padding_w = padding[1];
+    int input_w = input.w;
+    int input_h = input.h;
+    int output_w = input_w+2*padding_w;
+    int output_h = input_h+2*padding_h;
+    if(padding_h==0 && padding_w==0)
+    {
+        input_pad = input;
+        return ;
+    }
+    input_pad.create(output_w,output_h,in_channels);
+
+    for(int i=0;i<in_channels;i++)
+    {
+        float * input_ptr = input.channel(i);
+        float * pad_ptr = input_pad.channel(i);
+        int j=0;
+        //padding top
+        for(;j<padding_h;j++)
+        {
+            for(int k=0;k<output_w;k++)
+            {
+                pad_ptr[k]=0;
+            }
+            pad_ptr +=output_w;
+        }
+
+        //padding centor
+        for(;j<output_h-padding_h;j++)
+        {
+            int k=0;
+            for(;k<padding_w;k++)
+            {
+                pad_ptr[k]=0;
+            }
+            for(;k<output_w-padding_w;k++)
+            {
+                pad_ptr[k]=input_ptr[k-padding_w];
+            }
+           for(;k<output_w;k++)
+            {
+                pad_ptr[k]=0;
+            }            
+            input_ptr += input_w;
+            pad_ptr +=output_w;
+            
+        }
+
+        //padding bottom
+        for(;j<output_h;j++)
+        {
+            for(int k=0;k<output_w;k++)
+            {
+                pad_ptr[k]=0;
+            }
+            pad_ptr +=output_w;
+        }
+    }
+
+}
+
 int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
 {   
 
@@ -43,8 +109,21 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
     int out_h = (input_h+2*padding[0]-dilation[0]*(kernel_size[0]-1)-1)/stride[0]+1;
     int out_w = (input_h+2*padding[1]-dilation[1]*(kernel_size[1]-1)-1)/stride[1]+1;
     output.create(out_w,out_h,out_channels);
-
-    printf("in_channels:%d, out_channels:%d, input_h:%d ,input_w:%d ,out_h%d ,out_w%d",in_channels,out_channels,input_h,input_w,out_h,out_w);
+    
+    Mat input_pad=input;
+    if(strcmp(padding_mode.c_str(), "zeros")==0)
+    {   
+        copy_make_border_image(input,input_pad);
+        input_h = input_pad.h;
+        input_w = input_pad.w;
+    }
+    else
+    {
+        printf("do not support padding mode %s\n",padding_mode.c_str());
+        return -1;
+    }
+    
+    printf("in_channels:%d, out_channels:%d, input_h:%d ,input_w:%d ,out_h%d ,out_w%d",in_channels,out_channels,input.h,input.w,out_h,out_w);
 
 
     size_t kernel_max = kernel_size[0]*kernel_size[1];
@@ -80,7 +159,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
                 float* kptr =weight.channel(i);
                 for(int q = 0; q < in_channels; q++)
                 {
-                    const Mat m = input.channel(q);
+                    const Mat m = input_pad.channel(q);
                     const float* sptr = m.row(j * stride[1]) + k * stride[0];
 
                     for(int m=0;m<kernel_max;m++)
