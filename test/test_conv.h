@@ -3,6 +3,7 @@
 #include"ir.h"
 #include"net.h"
 #include"mat.h"
+#include"layers/convolution.h"
 
 std::vector<std::vector<std::vector<float>>> input_data=\
         {{{0.2295, 0.2599, 0.6441, 0.0168, 0.7927, 0.3168, 0.9468, 0.2946,
@@ -147,8 +148,8 @@ std::vector<std::vector<std::vector<float>>> input_data=\
 TEST(layer,conv_loadParam)
 {
     easynn::Net net;
-    EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/conv.pnnx.param",\
-    "/home/hupeng/code/github/EasyNN/example/conv.pnnx.bin"),0);
+    EXPECT_EQ(net.loadModel("/home/hp/code/github/EasyNN/example/conv.pnnx.param",\
+    "/home/hp/code/github/EasyNN/example/conv.pnnx.bin"),0);
     easynn::Mat input(12,12,3);
     easynn::Mat output(10,10,3);
     input.fillFromArray(input_data);
@@ -158,6 +159,21 @@ TEST(layer,conv_loadParam)
     easynn::Mat m;
     net.extractBlob(1,m);
     EXPECT_EQ(compareMat(m,output),0);
-    printMat(m); 
+    //printMat(m); 
 }
 
+TEST(layer,padding)
+{
+  easynn::Mat input(12,12,3);
+  easynn::Mat output(10,10,3);
+  input.fillFromArray(input_data);
+  output.fillFromArray(out_data);
+  easynn::Convolution c1;
+  c1.padding.resize(2);
+  c1.padding[0]=1;
+  c1.padding[1]=2;
+  c1.in_channels=3;
+  easynn:: Mat pad = input;
+  c1.copy_make_border_image(input,pad);
+  //printMat(pad);
+}
