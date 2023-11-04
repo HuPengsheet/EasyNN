@@ -5,33 +5,7 @@
 #include"mat.h"
 
 namespace easynn{
-void printMat(const easynn::Mat& m)
-{
-    if(m.isEmpty())
-    {
-        printf("mat is empty\n");
-        return ;
-    } 
-    printf("d=%d,c=%d,h=%d,w=%d \n",m.d,m.c,m.h,m.w);
-    for (int q=0; q<m.c; q++)
-    {
-        float* ptr = m.channel(q);
-        for (int z=0; z<m.d; z++)
-        {
-            for (int y=0; y<m.h; y++)
-            {
-                for (int x=0; x<m.w; x++)
-                {
-                    printf("%f ", ptr[x]);
-                }
-                ptr += m.w;
-                printf("\n");
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-}
+
 Convolution::Convolution()
 {
     one_blob_only=true;
@@ -123,7 +97,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
         return -1;
     }
     
-    printf("in_channels:%d, out_channels:%d, input_h:%d ,input_w:%d ,out_h%d ,out_w%d",in_channels,out_channels,input.h,input.w,out_h,out_w);
+    printf("in_channels:%d, out_channels:%d, input_h:%d ,input_w:%d ,out_h%d ,out_w%d\n",in_channels,out_channels,input.h,input.w,out_h,out_w);
 
 
     size_t kernel_max = kernel_size[0]*kernel_size[1];
