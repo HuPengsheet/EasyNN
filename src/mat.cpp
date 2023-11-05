@@ -459,7 +459,10 @@ float& Mat::operator[](size_t index)
     return ((float*)data)[index];
 }
 
-
+float& Mat::operator[](size_t index) const
+{
+    return ((float*)data)[index];
+}
 
 Mat Mat::clone() const
 {

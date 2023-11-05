@@ -1,7 +1,7 @@
 #include<iostream>
 #include<string>
 #include"maxpool.h"
-
+#include"benchmark.h"
 namespace easynn{
 
 
@@ -76,6 +76,7 @@ void MaxPool::copy_make_border_image(const Mat& input,Mat& input_pad)
 
 int MaxPool::forward(const Mat& input,Mat& output,const Optional& op)
 {
+    double start = get_current_time();
     if(input.dims==1)
     {
         printf("MaxPool do not support 1 dims Mat\n");
@@ -131,7 +132,7 @@ int MaxPool::forward(const Mat& input,Mat& output,const Optional& op)
         {
             for(int k=0;k<out_w;k++)
             {
-                const float* sptr = ptr_in.row(j * stride[1]) + k * stride[0];
+                const float* sptr = ptr_in.row(j * stride[0]) + k * stride[1];
                 float max = sptr[0];
                 for(int m=0;m<kernel_max;m++)
                 {
@@ -144,8 +145,9 @@ int MaxPool::forward(const Mat& input,Mat& output,const Optional& op)
         }
     }
     
-    return 0;    
-    std::cout<<"MaxPool forward"<<std::endl;
+    double end = get_current_time();
+    printf("%-15s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),input.c,output.c,input.h,input.w,output.h,output.w,end-start);
+
     return 0;
 
 }

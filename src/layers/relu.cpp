@@ -1,6 +1,6 @@
 #include<iostream>
 #include"relu.h"
-
+#include"benchmark.h"
 
 namespace easynn{
 
@@ -10,7 +10,7 @@ Relu::Relu()
 }
 int Relu::forward(const Mat& input,Mat& output,const Optional& op)
 {
-    
+    double start = get_current_time();
     if (input.dims == 1)
         output.create(input.w);
     else if (input.dims == 2)
@@ -41,6 +41,9 @@ int Relu::forward(const Mat& input,Mat& output,const Optional& op)
             }
         }
     }
+    double end = get_current_time();
+    printf("%-15s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),input.c,output.c,input.h,input.w,output.h,output.w,end-start);
+
     return 0;
 }
 

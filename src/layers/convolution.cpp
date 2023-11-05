@@ -3,7 +3,7 @@
 #include<string.h>
 #include"convolution.h"
 #include"mat.h"
-
+#include"benchmark.h"
 namespace easynn{
 
 Convolution::Convolution()
@@ -77,6 +77,7 @@ void Convolution::copy_make_border_image(const Mat& input,Mat& input_pad)
 
 int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
 {   
+    double start=get_current_time();
 
     int input_h = input.h;
     int input_w = input.w;
@@ -97,7 +98,6 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
         return -1;
     }
     
-    printf("in_channels:%d, out_channels:%d, input_h:%d ,input_w:%d ,out_h%d ,out_w%d\n",in_channels,out_channels,input.h,input.w,out_h,out_w);
 
 
     size_t kernel_max = kernel_size[0]*kernel_size[1];
@@ -134,7 +134,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
                 for(int q = 0; q < in_channels; q++)
                 {
                     const Mat m = input_pad.channel(q);
-                    const float* sptr = m.row(j * stride[1]) + k * stride[0];
+                    const float* sptr = m.row(j * stride[0]) + k * stride[1];
 
                     for(int m=0;m<kernel_max;m++)
                     {
@@ -151,7 +151,9 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
             ptr +=out_w;
         }
     }
-    
+    double end =get_current_time();
+    printf("%-15s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),in_channels,out_channels,input.h,input.w,out_h,out_w,end-start);
+
     return 0;
 }
 
@@ -202,11 +204,11 @@ int Convolution::loadBin(std::map<std::string, pnnx::Attribute>& attrs)
 
     if(use_bias)
     {
-        float* weight_data = (float*)(&attrs["bias"].data[0]);
+        float* bias_data = (float*)(&attrs["bias"].data[0]);
         bias.create(out_channels);
         for(int i=0;i<out_channels;i++)
         {
-            bias[i]=weight_data[i];
+            bias[i]=bias_data[i];
         }
     }
     return 0;   

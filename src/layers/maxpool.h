@@ -13,8 +13,8 @@ public:
     virtual int forward(const Mat& input,Mat& output,const Optional& op);
     virtual int loadParam(std::map<std::string, pnnx::Parameter>& params);
     void copy_make_border_image(const Mat& input,Mat& input_pad);
-public:
 
+public:
     bool ceil_mode ;
     bool return_indices;
     std::vector<int> padding;     //type 5

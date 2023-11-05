@@ -24,7 +24,7 @@ public:
 
     Mat& operator=(const Mat& m);
     float& operator[](size_t index); 
-
+    float& operator[](size_t index) const; 
     template<typename T>
     operator T*();
  

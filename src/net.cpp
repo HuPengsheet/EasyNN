@@ -18,6 +18,22 @@ std::string extractLayer(const std::string& input) {
 Net::Net()
 {
     op = Optional();
+    graph = new pnnx::Graph;
+}
+
+Net::~Net()
+{
+    clear();
+    for(auto layer:layers)
+        delete layer;
+}
+
+int Net::clear()
+{
+    for(auto &m:blob_mats)
+    {
+        m.clean();
+    }
 }
 
 int Net::forwarLayer(int layer_index)
@@ -58,22 +74,6 @@ int Net::forwarLayer(int layer_index)
     return 0;
 }
 
-
-int Net::blobforLayer(const size_t blob_num)
-{
-    pnnx::Operand* blob = graph.operands[blob_num];
-    pnnx::Operator* layer = blob->producer;
-    if(blob_mats[blob_num].isEmpty())
-    {
-        pnnx::Operand* blob = graph.operands[blob_num];
-        pnnx::Operator* layer = blob->producer;
-    }
-
-    return 0;
-    // if()
-    // std::cout<<blob->producer->name<<std::endl;
-} 
-
 int Net::input(int index,const Mat& input)
 {
     blob_mats[index]=input;
@@ -93,7 +93,7 @@ int Net::extractBlob(const size_t num,Mat& output)
 
 void Net::printLayer() const
 {
-    for(auto layer:graph.ops)
+    for(auto layer:graph->ops)
     {
         std::cout<<layer->name<<std::endl;
     }
@@ -102,17 +102,17 @@ void Net::printLayer() const
 int Net::loadModel(const char * param_path,const char * bin_path)
 {   
     int re =-1;
-    re = graph.load(param_path,bin_path);
+    re = graph->load(param_path,bin_path);
     if(re==0)
     {
-        layer_num = graph.ops.size();
-        blob_num = graph.operands.size();
+        layer_num = graph->ops.size();
+        blob_num = graph->operands.size();
         blobs.resize(blob_num); 
         blob_mats.resize(blob_num); 
         layers.resize(layer_num);
         for(int i=0;i<layer_num;i++)
         {
-            pnnx::Operator* op = graph.ops[i]; 
+            pnnx::Operator* op = graph->ops[i]; 
             std::string layer_type = extractLayer(op->type);
             layer_factory factory = 0;
             for(auto l:layes_factory)
@@ -148,7 +148,7 @@ int Net::loadModel(const char * param_path,const char * bin_path)
             layers[i]= layer;
         }
     }
-
+    delete graph;
     return re;
 }
 

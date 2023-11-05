@@ -14,13 +14,13 @@ class Net
 {
 public:
     Net();
-    // ~Net();
+    ~Net();
     void printLayer() const;
     int loadModel(const char * param_path,const char * bin_path);
     int extractBlob(const size_t num,Mat& output);
-    int blobforLayer(const size_t blob_num);
     int forwarLayer(int layer_index);
     int input(int index,const Mat& input);
+    int clear();
 
     std::vector<Blob> blobs;
     std::vector<Mat> blob_mats;
@@ -32,7 +32,7 @@ public:
     size_t blob_num;
     Optional op;
 private:
-    pnnx::Graph graph;
+    pnnx::Graph* graph;
 };
                                   
 
