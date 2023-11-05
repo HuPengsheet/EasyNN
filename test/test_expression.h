@@ -5,7 +5,7 @@
 #include"mat.h"
 #include"layers/expression.h"
 
-std::vector<std::vector<std::vector<float>>> add_left=\
+std::vector<std::vector<std::vector<float>>> exp_add_left=\
         {{{0.2295, 0.2599, 0.6441, 0.0168, 0.7927, 0.3168, 0.9468, 0.2946,
            0.6510, 0.1767, 0.7645, 0.4612},
           {0.3943, 0.9388, 0.9126, 0.3142, 0.2770, 0.9274, 0.2598, 0.9339,
@@ -81,7 +81,7 @@ std::vector<std::vector<std::vector<float>>> add_left=\
           {0.0239, 0.0835, 0.6143, 0.0222, 0.7029, 0.3813, 0.3447, 0.4178,
            0.1323, 0.3780, 0.7844, 0.0424}}};
 
-std::vector<std::vector<std::vector<float>>> add_right=\
+std::vector<std::vector<std::vector<float>>> exp_add_right=\
         {{{0.8504, 0.3527, 0.2732, 0.1852, 0.0831, 0.1327, 0.7408, 0.7811,
           0.5388, 0.3581, 0.1281, 0.3524},
          {0.1136, 0.2335, 0.0560, 0.5823, 0.2443, 0.3582, 0.6021, 0.2641,
@@ -157,7 +157,7 @@ std::vector<std::vector<std::vector<float>>> add_right=\
          {0.8799, 0.5817, 0.5698, 0.6256, 0.0470, 0.2415, 0.6565, 0.0526,
           0.0786, 0.1079, 0.1026, 0.4615}}};
 
-std::vector<std::vector<std::vector<float>>> out=\
+std::vector<std::vector<std::vector<float>>> exp_out=\
         {{{1.0799, 0.6126, 0.9173, 0.2020, 0.8758, 0.4495, 1.6876, 1.0757,
           1.1898, 0.5348, 0.8926, 0.8136},
          {0.5079, 1.1723, 0.9686, 0.8965, 0.5213, 1.2856, 0.8619, 1.1980,
@@ -238,9 +238,9 @@ TEST(EXPRESSION,forward1)
     easynn::Mat left_mat(12,12,3);
     easynn::Mat right_mat(12,12,3);
     easynn::Mat out_mat(12,12,3);
-    left_mat.fillFromArray(add_left);
-    right_mat.fillFromArray(add_right);
-    out_mat.fillFromArray(out);
+    left_mat.fillFromArray(exp_add_left);
+    right_mat.fillFromArray(exp_add_right);
+    out_mat.fillFromArray(exp_out);
 
     easynn::Expression exp;
     easynn::Optional option;

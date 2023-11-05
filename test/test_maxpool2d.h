@@ -5,7 +5,7 @@
 #include"mat.h"
 #include"layers/maxpool.h"
 
-std::vector<std::vector<std::vector<float>>> input_data=\
+std::vector<std::vector<std::vector<float>>> mp_input_data=\
         {{{0.2295, 0.2599, 0.6441, 0.0168, 0.7927, 0.3168, 0.9468, 0.2946,
            0.6510, 0.1767, 0.7645, 0.4612},
           {0.3943, 0.9388, 0.9126, 0.3142, 0.2770, 0.9274, 0.2598, 0.9339,
@@ -81,7 +81,7 @@ std::vector<std::vector<std::vector<float>>> input_data=\
           {0.0239, 0.0835, 0.6143, 0.0222, 0.7029, 0.3813, 0.3447, 0.4178,
            0.1323, 0.3780, 0.7844, 0.0424}}};
 
-  std::vector<std::vector<std::vector<float>>> data2 = \
+  std::vector<std::vector<std::vector<float>>> mp_data2 = \
         {{{0.9388, 0.9126, 0.9274, 0.9468, 0.6510, 0.7645},
          {0.9998, 0.7675, 0.4690, 0.3708, 0.8612, 0.9578},
          {0.9389, 0.9882, 0.6393, 0.4559, 0.9226, 0.2975},
@@ -103,7 +103,7 @@ std::vector<std::vector<std::vector<float>>> input_data=\
          {0.9856, 0.9139, 0.8008, 0.8968, 0.8499, 0.8425},
          {0.9671, 0.6611, 0.7459, 0.7680, 0.8672, 0.7844}}};
 
-std::vector<std::vector<std::vector<float>>> data3 = \
+std::vector<std::vector<std::vector<float>>> mp_data3 = \
         {{{0.9998, 0.9126, 0.9468, 0.9468, 0.7645},
          {0.9998, 0.9347, 0.6393, 0.7237, 0.9578},
          {0.9882, 0.9882, 0.9370, 0.9370, 0.9226},
@@ -122,7 +122,7 @@ std::vector<std::vector<std::vector<float>>> data3 = \
          {0.9856, 0.9594, 0.9594, 0.9950, 0.9827},
          {0.9856, 0.9139, 0.8968, 0.8968, 0.8672}}};
 
-std::vector<std::vector<std::vector<float>>> data4 = \
+std::vector<std::vector<std::vector<float>>> mp_data4 = \
         {{{0.9388, 0.9388, 0.9274, 0.9468, 0.9339, 0.7645},
          {0.9998, 0.9388, 0.9274, 0.9339, 0.9339, 0.9578},
          {0.9389, 0.9882, 0.9347, 0.6393, 0.9226, 0.9578},
@@ -147,7 +147,7 @@ std::vector<std::vector<std::vector<float>>> data4 = \
 TEST(MAXPOOL,forward1)
 {
     easynn::Mat input(12,12,3);
-    input.fillFromArray(input_data);
+    input.fillFromArray(mp_input_data);
 
     easynn::MaxPool mxpool;
 
@@ -175,8 +175,8 @@ TEST(MAXPOOL,forward2)
 {
     easynn::Mat input(12,12,3);
     easynn::Mat output(6,6,3);
-    input.fillFromArray(input_data);
-    output.fillFromArray(data2);
+    input.fillFromArray(mp_input_data);
+    output.fillFromArray(mp_data2);
     easynn::MaxPool mxpool;
 
     mxpool.padding.push_back(0);
@@ -201,8 +201,8 @@ TEST(MAXPOOL,forward3)
 {
     easynn::Mat input(12,12,3);
     easynn::Mat output(5,5,3);
-    input.fillFromArray(input_data);
-    output.fillFromArray(data3);
+    input.fillFromArray(mp_input_data);
+    output.fillFromArray(mp_data3);
     easynn::MaxPool mxpool;
 
     mxpool.padding.push_back(0);
@@ -227,8 +227,8 @@ TEST(MAXPOOL,forward4)
 {
     easynn::Mat input(12,12,3);
     easynn::Mat output(6,6,3);
-    input.fillFromArray(input_data);
-    output.fillFromArray(data4);
+    input.fillFromArray(mp_input_data);
+    output.fillFromArray(mp_data4);
     easynn::MaxPool mxpool;
 
     mxpool.padding.push_back(1);

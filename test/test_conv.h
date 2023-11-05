@@ -5,7 +5,7 @@
 #include"mat.h"
 #include"layers/convolution.h"
 
-std::vector<std::vector<std::vector<float>>> input_data2=\
+std::vector<std::vector<std::vector<float>>> conv_input_data2=\
         {{{0.0466, 0.5035, 0.3835, 0.8454, 0.0914, 0.3246, 0.0785, 0.6963,
            0.9694, 0.5654, 0.8196, 0.0589, 0.3179, 0.7435, 0.8902, 0.3490},
           {0.1816, 0.3534, 0.8486, 0.3395, 0.8878, 0.9373, 0.8915, 0.8101,
@@ -104,7 +104,7 @@ std::vector<std::vector<std::vector<float>>> input_data2=\
            0.1769, 0.3045, 0.8986, 0.1422, 0.0216, 0.0425, 0.2541, 0.9439},
           {0.2087, 0.8918, 0.7159, 0.6892, 0.8984, 0.3033, 0.0725, 0.4281,
            0.0555, 0.2589, 0.5209, 0.0396, 0.9660, 0.4845, 0.8605, 0.0397}}};
-std::vector<std::vector<std::vector<float>>> out_data2 =\
+std::vector<std::vector<std::vector<float>>> conv_out_data2 =\
         {{{ 0.2971,  0.2347},
           { 0.2333,  0.2254}},
 
@@ -135,7 +135,7 @@ std::vector<std::vector<std::vector<float>>> out_data2 =\
          {{ 0.1364,  0.0958},
           { 0.1925,  0.1090}}};
 
-std::vector<std::vector<std::vector<float>>> input_data=\
+std::vector<std::vector<std::vector<float>>> conv_input_data=\
         {{{0.2295, 0.2599, 0.6441, 0.0168, 0.7927, 0.3168, 0.9468, 0.2946,
            0.6510, 0.1767, 0.7645, 0.4612},
           {0.3943, 0.9388, 0.9126, 0.3142, 0.2770, 0.9274, 0.2598, 0.9339,
@@ -211,7 +211,7 @@ std::vector<std::vector<std::vector<float>>> input_data=\
           {0.0239, 0.0835, 0.6143, 0.0222, 0.7029, 0.3813, 0.3447, 0.4178,
            0.1323, 0.3780, 0.7844, 0.0424}}};
 
-  std::vector<std::vector<std::vector<float>>> out_data = \
+std::vector<std::vector<std::vector<float>>> conv_out_data = \
         {{{-0.0754, -0.2237, -0.0262,  0.0480, -0.0727, -0.1734,  0.0382,
            -0.2142, -0.2282, -0.1670},
           {-0.2160, -0.3609, -0.2223, -0.0724, -0.1837, -0.1930,  0.1487,
@@ -275,15 +275,15 @@ std::vector<std::vector<std::vector<float>>> input_data=\
           {-0.4058, -0.4360, -0.3671, -0.1427, -0.4255, -0.0408, -0.3916,
            -0.2498, -0.1944, -0.3262}}};
         
-TEST(layer,conv_loadParam)
+TEST(CONV,conv_loadParam)
 {
     easynn::Net net;
     EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/conv.pnnx.param",\
     "/home/hupeng/code/github/EasyNN/example/conv.pnnx.bin"),0);
     easynn::Mat input(12,12,3);
     easynn::Mat output(10,10,3);
-    input.fillFromArray(input_data);
-    output.fillFromArray(out_data);
+    input.fillFromArray(conv_input_data);
+    output.fillFromArray(conv_out_data);
 
     net.input(0,input);
     easynn::Mat m;
@@ -292,12 +292,12 @@ TEST(layer,conv_loadParam)
     //printMat(m); 
 }
 
-TEST(layer,padding)
+TEST(CONV,padding)
 {
   easynn::Mat input(12,12,3);
   easynn::Mat output(10,10,3);
-  input.fillFromArray(input_data);
-  output.fillFromArray(out_data);
+  input.fillFromArray(conv_input_data);
+  output.fillFromArray(conv_out_data);
   easynn::Convolution c1;
   c1.padding.resize(2);
   c1.padding[0]=1;
@@ -308,15 +308,15 @@ TEST(layer,padding)
   //printMat(pad);
 }
 
-TEST(layer,conv2)
+TEST(CONV,conv2)
 {
     easynn::Net net;
     EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/conv2.pnnx.param",\
     "/home/hupeng/code/github/EasyNN/example/conv2.pnnx.bin"),0);
     easynn::Mat input(16,16,3);
     easynn::Mat output(2,2,10);
-    input.fillFromArray(input_data2);
-    output.fillFromArray(out_data2);
+    input.fillFromArray(conv_input_data2);
+    output.fillFromArray(conv_out_data2);
 
     net.input(0,input);
     easynn::Mat m;
