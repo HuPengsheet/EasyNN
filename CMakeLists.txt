@@ -9,10 +9,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)  # 禁止使用编译器特有扩展
 
 file(GLOB SRC src/*.cpp)
 file(GLOB LAYERS_SRC src/layers/*.cpp)
+
 set(INCLUDE ${CMAKE_SOURCE_DIR}/src)
 set(TEST ${CMAKE_SOURCE_DIR}/test)
-
+set(EXAMPLE ${CMAKE_SOURCE_DIR}/example)
 #add_executable(run src/main.cpp src/ir.cpp src/storezip.cpp src/utils.cpp)
 # add_executable(run src/main.cpp src/ir.cpp src/storezip.cpp)
 # target_include_directories(run PUBLIC src)
 add_subdirectory(test)
+add_subdirectory(example)
