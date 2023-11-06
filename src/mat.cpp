@@ -349,7 +349,7 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<std::vector<float>>>
         return ;
     }
 
-    if(x.size()!=c|| x[0].size()!=d || x[0][0].size()!=w || x[0][0][0].size()!=h)
+    if(x.size()!=c|| x[0].size()!=d || x[0][0].size()!=h || x[0][0][0].size()!=w)
     {
         printf(" vector and mat size not match\n");
         return ;
@@ -476,6 +476,158 @@ void Mat::create(int _w,int _h,int _d,int _c,size_t _elemsize)
     }         
 }
 
+Mat Mat::reshape(int _w) const
+{
+    if (w * h * d * c != _w)
+        return Mat();
+
+    if (dims >= 3 && cstep != (size_t)w * h * d)
+    {
+        Mat m;
+        m.create(_w, elemsize);
+
+        // flatten
+        for (int i = 0; i < c; i++)
+        {
+            const void* ptr = (unsigned char*)data + i * cstep * elemsize;
+            void* mptr = (unsigned char*)m.data + (size_t)i * w * h * d * elemsize;
+            memcpy(mptr, ptr, (size_t)w * h * d * elemsize);
+        }
+
+        return m;
+    }
+
+    Mat m = *this;
+
+    m.dims = 1;
+    m.w = _w;
+    m.h = 1;
+    m.d = 1;
+    m.c = 1;
+
+    m.cstep = _w;
+
+    return m;
+}
+
+Mat Mat::reshape(int _w, int _h) const
+{
+    if (w * h * d * c != _w * _h)
+        return Mat();
+
+    if (dims >= 3 && cstep != (size_t)w * h * d)
+    {
+        Mat m;
+        m.create(_w, _h, elemsize);
+
+        // flatten
+        for (int i = 0; i < c; i++)
+        {
+            const void* ptr = (unsigned char*)data + i * cstep * elemsize;
+            void* mptr = (unsigned char*)m.data + (size_t)i * w * h * d * elemsize;
+            memcpy(mptr, ptr, (size_t)w * h * d * elemsize);
+        }
+
+        return m;
+    }
+
+    Mat m = *this;
+
+    m.dims = 2;
+    m.w = _w;
+    m.h = _h;
+    m.d = 1;
+    m.c = 1;
+
+    m.cstep = (size_t)_w * _h;
+
+    return m;
+}
+
+Mat Mat::reshape(int _w, int _h, int _c) const
+{
+    if (w * h * d * c != _w * _h * _c)
+        return Mat();
+
+    if (dims < 3)
+    {
+        if ((size_t)_w * _h != alignSize((size_t)_w * _h * elemsize, 16) / elemsize)
+        {
+            Mat m;
+            m.create(_w, _h, _c, elemsize);
+
+            // align channel
+            for (int i = 0; i < _c; i++)
+            {
+                const void* ptr = (unsigned char*)data + (size_t)i * _w * _h * elemsize;
+                void* mptr = (unsigned char*)m.data + i * m.cstep * m.elemsize;
+                memcpy(mptr, ptr, (size_t)_w * _h * elemsize);
+            }
+
+            return m;
+        }
+    }
+    else if (c != _c)
+    {
+        // flatten and then align
+        Mat tmp = reshape(_w * _h * _c);
+        return tmp.reshape(_w, _h, _c);
+    }
+
+    Mat m = *this;
+
+    m.dims = 3;
+    m.w = _w;
+    m.h = _h;
+    m.d = 1;
+    m.c = _c;
+
+    m.cstep = alignSize((size_t)_w * _h * elemsize, 16) / elemsize;
+
+    return m;
+}
+
+Mat Mat::reshape(int _w, int _h, int _d, int _c) const
+{
+    if (w * h * d * c != _w * _h * _d * _c)
+        return Mat();
+
+    if (dims < 3)
+    {
+        if ((size_t)_w * _h * _d != alignSize((size_t)_w * _h * _d * elemsize, 16) / elemsize)
+        {
+            Mat m;
+            m.create(_w, _h, _d, _c, elemsize);
+
+            // align channel
+            for (int i = 0; i < _c; i++)
+            {
+                const void* ptr = (unsigned char*)data + (size_t)i * _w * _h * _d * elemsize;
+                void* mptr = (unsigned char*)m.data + i * m.cstep * m.elemsize;
+                memcpy(mptr, ptr, (size_t)_w * _h * _d * elemsize);
+            }
+
+            return m;
+        }
+    }
+    else if (c != _c)
+    {
+        // flatten and then align
+        Mat tmp = reshape(_w * _h * _d * _c);
+        return tmp.reshape(_w, _h, _d, _c);
+    }
+
+    Mat m = *this;
+
+    m.dims = 4;
+    m.w = _w;
+    m.h = _h;
+    m.d = _d;
+    m.c = _c;
+
+    m.cstep = alignSize((size_t)_w * _h * _d * elemsize, 16) / elemsize;
+    return m;
+}
 Mat::~Mat()
 {
     clean();

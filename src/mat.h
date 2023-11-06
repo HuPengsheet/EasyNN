@@ -36,7 +36,11 @@ public:
     void fill(int x);
     void fill(float x);
 
-    
+    Mat reshape(int _w) const;
+    Mat reshape(int _w, int _h) const;
+    Mat reshape(int _w, int _h, int _c) const;
+    Mat reshape(int _w, int _h, int _d, int _c) const;
+
     void fillFromArray(std::vector<int> x);
     void fillFromArray(std::vector<std::vector<int>> x);
     void fillFromArray(std::vector<std::vector<std::vector<int>>> x);
