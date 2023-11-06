@@ -82,17 +82,3 @@ TEST(UPSAMPLE,forward)
 }
 
 
-template<typename T>
-std::vector<size_t> get_nested_vector_sizes(const std::vector<T>& vec) {
-    std::vector<size_t> sizes;
-    sizes.push_back(vec.size());
-
-    for (const auto& item : vec) {
-        if (std::is_same_v<T, std::vector<typename T::value_type>>) {
-            auto sub_sizes = get_nested_vector_sizes(item);
-            sizes.insert(sizes.end(), sub_sizes.begin(), sub_sizes.end());
-        }
-    }
-
-    return sizes;
-}
