@@ -147,8 +147,8 @@ int Net::loadModel(const char * param_path,const char * bin_path)
             layer->loadBin(op->attrs);
             layers[i]= layer;
         }
+        delete graph;
     }
-    delete graph;
     return re;
 }
 
