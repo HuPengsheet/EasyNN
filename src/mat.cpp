@@ -6,7 +6,6 @@
 
 namespace easynn{
 
-
 void Mat::clean()
 {   
     if(refcount && (*refcount-=1)==0)
@@ -77,7 +76,7 @@ void Mat::fill(int x)
         return ;
     } 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -96,7 +95,7 @@ void Mat::fill(float x)
         return ;
     } 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -110,17 +109,25 @@ void Mat::fill(float x)
 
 void Mat::fillFromArray(std::vector<int> x)
 {
-    if(dims!=1||isEmpty())
+    if(dims!=1)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
         return ;
     }
     if(x.size() != w)
     {
+        printf(" vector and mat size not match\n");
         return ;
     }
     
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);;
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -134,13 +141,26 @@ void Mat::fillFromArray(std::vector<int> x)
 
 void Mat::fillFromArray(std::vector<std::vector<int>> x)
 {
-    if(dims!=2||isEmpty())
+    if(dims!=2)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
+        return ;
+    }
+
+    if(x.size()!=h|| x[0].size()!=w)
+    {
+        printf(" vector and mat size not match\n");
         return ;
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -154,13 +174,26 @@ void Mat::fillFromArray(std::vector<std::vector<int>> x)
 
 void Mat::fillFromArray(std::vector<std::vector<std::vector<int>>> x)
 {
-    if(dims!=3||isEmpty())
+    if(dims!=3)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
+        return ;
+    }
+
+    if(x.size()!=c|| x[0].size()!=h || x[0][0].size()!=w)
+    {
+        printf(" vector and mat size not match\n");
         return ;
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -173,13 +206,26 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<int>>> x)
 }
 void Mat::fillFromArray(std::vector<std::vector<std::vector<std::vector<int>>>> x)
 {
-    if(dims!=4||isEmpty())
+    if(dims!=4)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
+        return ;
+    }
+
+    if(x.size()!=c|| x[0].size()!=d || x[0][0].size()!=w || x[0][0][0].size()!=h)
+    {
+        printf(" vector and mat size not match\n");
         return ;
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -193,17 +239,25 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<std::vector<int>>>> 
 
 void Mat::fillFromArray(std::vector<float> x)
 {
-    if(dims!=1||isEmpty())
+    if(dims!=1)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
         return ;
     }
     if(x.size() != w)
     {
+        printf(" vector and mat size not match\n");
         return ;
     }
     
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -217,13 +271,26 @@ void Mat::fillFromArray(std::vector<float> x)
 
 void Mat::fillFromArray(std::vector<std::vector<float>> x)
 {
-    if(dims!=2||isEmpty())
+    if(dims!=2)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
+        return ;
+    }
+
+    if(x.size()!=h|| x[0].size()!=w)
+    {
+        printf(" vector and mat size not match\n");
         return ;
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -237,13 +304,26 @@ void Mat::fillFromArray(std::vector<std::vector<float>> x)
 
 void Mat::fillFromArray(std::vector<std::vector<std::vector<float>>> x)
 {
-    if(dims!=3||isEmpty())
+    if(dims!=3)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
+        return ;
+    }
+
+    if(x.size()!=c|| x[0].size()!=h || x[0][0].size()!=w)
+    {
+        printf(" vector and mat size not match\n");
         return ;
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
@@ -257,13 +337,26 @@ void Mat::fillFromArray(std::vector<std::vector<std::vector<float>>> x)
 
 void Mat::fillFromArray(std::vector<std::vector<std::vector<std::vector<float>>>> x)
 {
-    if(dims!=4||isEmpty())
+    if(dims!=4)
     {
+        printf("dims not match\n");
+        return ;
+    }
+
+    if(isEmpty()||x.empty())
+    {
+        printf(" vector or mat empty\n");
+        return ;
+    }
+
+    if(x.size()!=c|| x[0].size()!=d || x[0][0].size()!=w || x[0][0][0].size()!=h)
+    {
+        printf(" vector and mat size not match\n");
         return ;
     }
 
     for(int i=0;i<c;i++){
-        float *ptr = (float *)((char *)data+cstep*i*elemsize);
+        float *ptr = this->channel(i);
         for(int z=0;z<d;z++){
             for(int j=0;j<h;j++){
                 for(int k=0;k<w;k++){
