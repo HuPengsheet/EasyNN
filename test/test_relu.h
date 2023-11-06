@@ -5,6 +5,7 @@
 #include"mat.h"
 #include"layers/relu.h"
 #include"optional.h"
+
 TEST(Relu,forward)
 {
     easynn::Mat m1(5);
