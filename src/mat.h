@@ -57,6 +57,8 @@ public:
 
     float* row(int y);
     float* row(int y) const;
+    Mat depth(int z);
+    Mat depth(int z) const;
     Mat channel(int _c);
     Mat channel(int _c) const ;
     
