@@ -25,8 +25,11 @@ public:
     Mat& operator=(const Mat& m);
     float& operator[](size_t index); 
     float& operator[](size_t index) const; 
+
     template<typename T>
     operator T*();
+    template<typename T>
+    operator const T*() const;
  
     void create(int _w,size_t _elemsize=4u); 
     void create(int _w,int _h,size_t _elemsize=4u); 
@@ -81,6 +84,12 @@ public:
 
 template<typename T>
 Mat::operator T*()
+{
+    return (T*)data;
+}
+
+template<typename T>
+Mat::operator const T*() const
 {
     return (T*)data;
 }
