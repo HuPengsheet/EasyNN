@@ -64,7 +64,7 @@ static void pretreatment(cv::Mat& input_image,easynn::Mat& output_image,int h,in
     }
 } 
 
-static void res18(const easynn::Mat& in,const easynn::Mat& rescult)
+static void res18(const easynn::Mat& in,easynn::Mat& result)
 {
     easynn::Net net;
     net.loadModel(\

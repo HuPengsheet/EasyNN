@@ -52,7 +52,7 @@ int Cat::forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Op
 
     double end = get_current_time();
     printf("%-15s,cat forward :time=%fms\n",name.c_str(),end-start);
-
+    return 0;
 }
 
 int Cat::loadParam(std::map<std::string, pnnx::Parameter>& params)

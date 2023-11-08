@@ -34,6 +34,7 @@ int Net::clear()
     {
         m.clean();
     }
+    return 0;
 }
 
 int Net::forwarLayer(int layer_index)
@@ -77,6 +78,7 @@ int Net::forwarLayer(int layer_index)
 int Net::input(int index,const Mat& input)
 {
     blob_mats[index]=input;
+    return 0;
 }
 
 int Net::extractBlob(const size_t num,Mat& output) 
@@ -148,6 +150,11 @@ int Net::loadModel(const char * param_path,const char * bin_path)
             layers[i]= layer;
         }
         delete graph;
+    }
+    else
+    {
+        printf("load %s  %s fail\n",param_path,bin_path);
+        return re;
     }
     return re;
 }
