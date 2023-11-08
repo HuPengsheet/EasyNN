@@ -121,11 +121,11 @@ static void nms_sorted_bboxes(const std::vector<Object>& faceobjects, std::vecto
             if (!agnostic && a.label != b.label)
                 continue;
 
-            // IOU¼ÆËã
+            // IOUè®¡ç®—
             float inter_area = intersection_area(a, b);
             float union_area = areas[i] + areas[picked[j]] - inter_area;
 
-            // È¥³ıÀëµÄºÜ½üµÄ¿ò
+            // å»é™¤é‡Œçš„å¾ˆè¿‘çš„æ¡†
             if (inter_area / union_area > nms_threshold)
                 keep = 0;
         }
@@ -163,13 +163,13 @@ static void generate_proposals(const easynn::Mat& anchors, int stride, const eas
         {
             for (int j = 0; j < num_grid_x; j++)
             {
-                //featptrÖ¸ÏòµÄÊÇ×îºóÒ»¸öÎ¬¶Èw,Õâ¸öÎ¬¶ÈÊÇ85¸öÊı¾İ£¬¶ÔÓ¦µÄÊÇcocoµÄ4¸ö×ø±ê+ÖÃĞÅ¶È+80¸öÀà±ğ
-                //¼´¶ÔÓ¦µÄÊÇ dx dy dw dh confidence cls0 cls1 ... cls79 (4+1+80 = 85)
+                //featptræŒ‡å‘çš„æ˜¯æœ€åä¸€ä¸ªç»´åº¦w,è¿™ä¸ªç»´åº¦æ˜¯85ä¸ªæ•°æ®ï¼Œå¯¹åº”çš„æ˜¯cocoçš„4ä¸ªåæ ‡+ç½®ä¿¡åº¦+80ä¸ªç±»åˆ«
+                //å³å¯¹åº”çš„æ˜¯ dx dy dw dh confidence cls0 cls1 ... cls79 (4+1+80 = 85)
                 const float* featptr = feat.depth(i).row(j);
                 float box_confidence = sigmoid(featptr[4]);
                 if (box_confidence >= prob_threshold)
                 {
-                    // ±éÀúËùÓĞÀà±ğµÄ·ÖÊı£¬È·¶¨ÄÄ¸öÀà±ğ·ÖÊı×î¸ß£¬²¢¼ÇÂ¼ÏÂ¶ÔÓ¦µÄ·ÖÊı
+                    // éå†æ‰€æœ‰ç±»åˆ«çš„åˆ†æ•°ï¼Œç¡®å®šå“ªä¸ªç±»åˆ«åˆ†æ•°æœ€é«˜ï¼Œå¹¶è®°å½•ä¸‹å¯¹åº”çš„åˆ†æ•°
                     int class_index = 0;
                     float class_score = -FLT_MAX;
                     for (int k = 0; k < num_class; k++)
@@ -184,7 +184,7 @@ static void generate_proposals(const easynn::Mat& anchors, int stride, const eas
                     float confidence = box_confidence * sigmoid(class_score);
                     if (confidence >= prob_threshold)
                     {
-                        //  ÏÂÃæµÄ×ª»»¶ÔÓ¦µÄÊÇyolov5/models/yolo.pyÀïµÄ´úÂë 
+                        // ä¸‹é¢çš„è½¬æ¢å¯¹åº”çš„æ˜¯yolov5/models/yolo.pyé‡Œçš„ä»£ç  
                         // y = x[i].sigmoid()
                         // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
                         // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
@@ -351,7 +351,7 @@ int main()
         return -1;
     }
     
-    // ¼ÆËãËõ·ÅÏµÊı
+    // è®¡ç®—ç¼©æ”¾ç³»æ•°
     float h = image.rows;
     float w = image.cols;
     float h_s = 640/h;
@@ -361,18 +361,18 @@ int main()
     easynn::Mat in;
     pretreatment(image,in,640,640);
 
-    //Í¼Æ¬¹éÒ»»¯
+    //å›¾ç‰‡å½’ä¸€åŒ–
     normize(in);
 
-    //proposalsÀï±£´æµÄÊÇ¼ì²â¿ò
+    //proposalsé‡Œä¿å­˜çš„æ˜¯æ£€æµ‹æ¡†
     std::vector<Object> proposals;
     yolo_detect(in,proposals);
 
-    //¶ÔËùÓĞµÄ¼ì²â¿ò£¬°´ÖÃĞÅ¶ÈÅÅĞò£¬·½±ãNMS×ö´¦Àí
+    //å¯¹æ‰€æœ‰çš„æ£€æµ‹æ¡†ï¼ŒæŒ‰ç½®ä¿¡åº¦æ’åºï¼Œæ–¹ä¾¿NMSåšå¤„ç†
     qsort_descent_inplace(proposals);
 
 
-    //pickedÀï±£´æµÄÊÇNMSºó£¬±£´æÏÂÀ´µÄ¿òµÄË÷Òı
+    //pickedé‡Œä¿å­˜çš„æ˜¯NMSåï¼Œä¿å­˜ä¸‹æ¥çš„æ¡†çš„ç´¢å¼•
     std::vector<int> picked;
     const float nms_threshold = 0.45f;
     nms_sorted_bboxes(proposals, picked, nms_threshold);
@@ -381,7 +381,7 @@ int main()
 
     int count = picked.size();
 
-    //objects±£´æµÄÊÇNMSºóµÄ¿ò£¬²¢³ıÒÔËõ·ÅÏµÊı£¬·µ»Øµ½Ô­Ê¼Í¼Ïñ
+    //objectsä¿å­˜çš„æ˜¯NMSåçš„æ¡†ï¼Œå¹¶é™¤ä»¥ç¼©æ”¾ç³»æ•°ï¼Œè¿”å›åˆ°åŸå§‹å›¾åƒ
     std::vector<Object> objects;
     objects.resize(count);
     for (int i = 0; i < count; i++)
@@ -400,7 +400,7 @@ int main()
         objects[i].rect.height = y1 - y0;
     }
 
-    // »æÖÆ¼ì²â¿ò
+     // ç»˜åˆ¶æ£€æµ‹æ¡†
     draw_objects(image,objects);
     return 0;
 }
