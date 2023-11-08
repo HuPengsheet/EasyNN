@@ -8,6 +8,7 @@ class Optional
 {
 public:
     Optional();
+    int num_thread;
 };
 
 }//namespace easynn

@@ -68,15 +68,15 @@ static void res18(const easynn::Mat& in,easynn::Mat& result)
 {
     easynn::Net net;
     net.loadModel(\
-    "/home/hupeng/code/github/EasyNN/example/res18.pnnx.param",\
-    "/home/hupeng/code/github/EasyNN/example/res18.pnnx.bin");
+    "../example/res18.pnnx.param",\
+    "../example/res18.pnnx.bin");
     net.input(0,in);
     net.extractBlob(49,result);
 }
 
 int main()
 {
-    std::string image_path = "/home/hupeng/code/github/EasyNN/images/dog.jpg";
+    std::string image_path = "../images/dog.jpg";
     cv::Mat image = cv::imread(image_path, 1);
     if (image.empty())
     {

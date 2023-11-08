@@ -18,6 +18,7 @@ std::string extractLayer(const std::string& input) {
 Net::Net()
 {
     op = Optional();
+    op.num_thread = 8;
     graph = new pnnx::Graph;
 }
 

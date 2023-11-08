@@ -117,7 +117,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
             q +=gap;
         }
     }
-
+    #pragma omp parallel for num_threads(op.num_thread)
     for(int i=0;i<out_channels;i++)
     {
         float* ptr = output.channel(i);
