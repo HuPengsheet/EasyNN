@@ -6,7 +6,7 @@
 
 
 
-void normize(const easynn::Mat& m,std::vector<float> mean,std::vector<float> var)
+static void normize(const easynn::Mat& m,std::vector<float> mean,std::vector<float> var)
 {
     for (int q=0; q<m.c; q++)
     {
@@ -26,7 +26,7 @@ void normize(const easynn::Mat& m,std::vector<float> mean,std::vector<float> var
     }
 }
 
-int findMax(const easynn::Mat& m)
+static int findMax(const easynn::Mat& m)
 {
     int index=0;
     float max = m[0];
@@ -42,7 +42,7 @@ int findMax(const easynn::Mat& m)
     return index;
 }
 
-void pretreatment(cv::Mat& input_image,easynn::Mat& output_image,int h,int w)
+static void pretreatment(cv::Mat& input_image,easynn::Mat& output_image,int h,int w)
 {
     cv::Mat resize_image;
     cv::resize(input_image, resize_image, cv::Size(224, 224));
@@ -64,6 +64,16 @@ void pretreatment(cv::Mat& input_image,easynn::Mat& output_image,int h,int w)
     }
 } 
 
+static void res18(const easynn::Mat& in,const easynn::Mat& rescult)
+{
+    easynn::Net net;
+    net.loadModel(\
+    "/home/hupeng/code/github/EasyNN/example/res18.pnnx.param",\
+    "/home/hupeng/code/github/EasyNN/example/res18.pnnx.bin");
+    net.input(0,in);
+    net.extractBlob(49,result);
+}
+
 int main()
 {
     std::string image_path = "/home/hupeng/code/github/EasyNN/images/dog.jpg";
@@ -83,17 +93,13 @@ int main()
     std::vector<float> var = { 0.229f,0.224f,0.225f};
     normize(in,mean,var);
 
-    easynn::Net net;
-    net.loadModel("/home/hupeng/code/github/EasyNN/example/res18.pnnx.param","/home/hupeng/code/github/EasyNN/example/res18.pnnx.bin");
-    net.input(0,in);
-
     // forward net
     easynn::Mat result;
-    net.extractBlob(49,result);
-
+    res18(in,result);
+    
     //find Max score class
     int cls = findMax(result);
-
     printf("cls = %d",cls);
+
     return 0;
 }
