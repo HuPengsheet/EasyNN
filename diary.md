@@ -37,6 +37,25 @@
     这段时间构思了一下架构，准备先把layer写了，然后再写net类。
 
 
+==109145== 
+==109145== HEAP SUMMARY:
+==109145==     in use at exit: 1,120,274 bytes in 8,585 blocks
+==109145==   total heap usage: 58,955 allocs, 50,370 frees, 414,600,313 bytes allocated
+==109145== 
+==109145== LEAK SUMMARY:
+==109145==    definitely lost: 0 bytes in 0 blocks
+==109145==    indirectly lost: 0 bytes in 0 blocks
+==109145==      possibly lost: 7,472 bytes in 39 blocks
+==109145==    still reachable: 1,039,714 bytes in 8,096 blocks
+==109145==                       of which reachable via heuristic:
+==109145==                         length64           : 5,408 bytes in 77 blocks
+==109145==                         newarray           : 1,760 bytes in 30 blocks
+==109145==         suppressed: 0 bytes in 0 blocks
+==109145== Rerun with --leak-check=full to see details of leaked memory
+==109145== 
+==109145== For lists of detected and suppressed errors, rerun with: -s
+==109145== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
 
 
 需要写的算子：

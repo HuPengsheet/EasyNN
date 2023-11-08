@@ -3,8 +3,12 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 
-
-
+struct Object
+{
+    cv::Rect_<float> rect;
+    int label;
+    float prob;
+};
 
 void normize(const easynn::Mat& m)
 {
@@ -48,12 +52,7 @@ void pretreatment(cv::Mat& input_image,easynn::Mat& output_image,int h,int w)
     }
 } 
 
-struct Object
-{
-    cv::Rect_<float> rect;
-    int label;
-    float prob;
-};
+
 
 static inline float intersection_area(const Object& a, const Object& b)
 {
@@ -85,17 +84,9 @@ static void qsort_descent_inplace(std::vector<Object>& faceobjects, int left, in
         }
     }
 
-    #pragma omp parallel sections
-    {
-        #pragma omp section
-        {
-            if (left < j) qsort_descent_inplace(faceobjects, left, j);
-        }
-        #pragma omp section
-        {
-            if (i < right) qsort_descent_inplace(faceobjects, i, right);
-        }
-    }
+    if (left < j) qsort_descent_inplace(faceobjects, left, j);
+    if (i < right) qsort_descent_inplace(faceobjects, i, right);
+
 }
 
 static void qsort_descent_inplace(std::vector<Object>& faceobjects)
@@ -130,10 +121,11 @@ static void nms_sorted_bboxes(const std::vector<Object>& faceobjects, std::vecto
             if (!agnostic && a.label != b.label)
                 continue;
 
-            // intersection over union
+            // IOU计算
             float inter_area = intersection_area(a, b);
             float union_area = areas[i] + areas[picked[j]] - inter_area;
-            // float IoU = inter_area / union_area
+
+            // 去除离的很近的框
             if (inter_area / union_area > nms_threshold)
                 keep = 0;
         }
@@ -151,77 +143,83 @@ static inline float sigmoid(float x)
 static void generate_proposals(const easynn::Mat& anchors, int stride, const easynn::Mat& in_pad, const easynn::Mat& feat_blob, float prob_threshold, std::vector<Object>& objects)
 {
     
-   const int num_grid_x = feat_blob.w;
-    const int num_grid_y = feat_blob.h;
+
+    int num_grid_x = feat_blob.d;
+    int num_grid_y = feat_blob.h;
+
+
+    const int num_class = feat_blob.w - 5;
 
     const int num_anchors = anchors.w / 2;
-
-    const int num_class = feat_blob.c / num_anchors - 5;
-
-    const int feat_offset = num_class + 5;
 
     for (int q = 0; q < num_anchors; q++)
     {
         const float anchor_w = anchors[q * 2];
         const float anchor_h = anchors[q * 2 + 1];
 
+        const easynn::Mat feat = feat_blob.channel(q);
+
         for (int i = 0; i < num_grid_y; i++)
         {
             for (int j = 0; j < num_grid_x; j++)
             {
-                // find class index with max class score
-                int class_index = 0;
-                float class_score = -FLT_MAX;
-                for (int k = 0; k < num_class; k++)
+                //featptr指向的是最后一个维度w,这个维度是85个数据，对应的是coco的4个坐标+置信度+80个类别
+                //即对应的是 dx dy dw dh confidence cls0 cls1 ... cls79 (4+1+80 = 85)
+                const float* featptr = feat.depth(i).row(j);
+                float box_confidence = sigmoid(featptr[4]);
+                if (box_confidence >= prob_threshold)
                 {
-                    float score = feat_blob.channel(q * feat_offset + 5 + k).row(i)[j];
-                    if (score > class_score)
+                    // 遍历所有类别的分数，确定哪个类别分数最高，并记录下对应的分数
+                    int class_index = 0;
+                    float class_score = -FLT_MAX;
+                    for (int k = 0; k < num_class; k++)
                     {
-                        class_index = k;
-                        class_score = score;
+                        float score = featptr[5 + k];
+                        if (score > class_score)
+                        {
+                            class_index = k;
+                            class_score = score;
+                        }
                     }
-                }
+                    float confidence = box_confidence * sigmoid(class_score);
+                    if (confidence >= prob_threshold)
+                    {
+                        //  下面的转换对应的是yolov5/models/yolo.py里的代码 
+                        // y = x[i].sigmoid()
+                        // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
+                        // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
 
-                float box_score = feat_blob.channel(q * feat_offset + 4).row(i)[j];
+                        float dx = sigmoid(featptr[0]);
+                        float dy = sigmoid(featptr[1]);
+                        float dw = sigmoid(featptr[2]);
+                        float dh = sigmoid(featptr[3]);
 
-                float confidence = sigmoid(box_score) * sigmoid(class_score);
+                        float pb_cx = (dx * 2.f - 0.5f + j) * stride;
+                        float pb_cy = (dy * 2.f - 0.5f + i) * stride;
 
-                if (confidence >= prob_threshold)
-                {
-                    // yolov5/models/yolo.py Detect forward
-                    // y = x[i].sigmoid()
-                    // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
-                    // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
+                        float pb_w = pow(dw * 2.f, 2) * anchor_w;
+                        float pb_h = pow(dh * 2.f, 2) * anchor_h;
 
-                    float dx = sigmoid(feat_blob.channel(q * feat_offset + 0).row(i)[j]);
-                    float dy = sigmoid(feat_blob.channel(q * feat_offset + 1).row(i)[j]);
-                    float dw = sigmoid(feat_blob.channel(q * feat_offset + 2).row(i)[j]);
-                    float dh = sigmoid(feat_blob.channel(q * feat_offset + 3).row(i)[j]);
+                        float x0 = pb_cx - pb_w * 0.5f;
+                        float y0 = pb_cy - pb_h * 0.5f;
+                        float x1 = pb_cx + pb_w * 0.5f;
+                        float y1 = pb_cy + pb_h * 0.5f;
 
-                    float pb_cx = (dx * 2.f - 0.5f + j) * stride;
-                    float pb_cy = (dy * 2.f - 0.5f + i) * stride;
+                        Object obj;
+                        obj.rect.x = x0;
+                        obj.rect.y = y0;
+                        obj.rect.width = x1 - x0;
+                        obj.rect.height = y1 - y0;
+                        obj.label = class_index;
+                        obj.prob = confidence;
 
-                    float pb_w = pow(dw * 2.f, 2) * anchor_w;
-                    float pb_h = pow(dh * 2.f, 2) * anchor_h;
-
-                    float x0 = pb_cx - pb_w * 0.5f;
-                    float y0 = pb_cy - pb_h * 0.5f;
-                    float x1 = pb_cx + pb_w * 0.5f;
-                    float y1 = pb_cy + pb_h * 0.5f;
-
-                    Object obj;
-                    obj.rect.x = x0;
-                    obj.rect.y = y0;
-                    obj.rect.width = x1 - x0;
-                    obj.rect.height = y1 - y0;
-                    obj.label = class_index;
-                    obj.prob = confidence;
-
-                    objects.push_back(obj);
+                        objects.push_back(obj);
+                    }
                 }
             }
         }
-    }
+    }    
+
 }
 
 static void draw_objects(const cv::Mat& bgr, const std::vector<Object>& objects)
@@ -273,36 +271,25 @@ static void draw_objects(const cv::Mat& bgr, const std::vector<Object>& objects)
     cv::waitKey(0);
 }
 
-
-int main()
+static void yolo_detect(const easynn::Mat in,std::vector<Object>& proposals)
 {
-    std::string image_path = "/home/hupeng/code/github/EasyNN/images/bus2.jpg";
-    cv::Mat image = cv::imread(image_path, 1);
-    if (image.empty())
-    {
-        fprintf(stderr, "cv::imread %s failed\n", image_path.c_str());
-        return -1;
-    }
-
-    //cv::Mat to EasyNN Mat
-    easynn::Mat in;
-    pretreatment(image,in,640,640);
-
-    normize(in);
-
     easynn::Net net;
-    net.loadModel("/home/hupeng/code/github/EasyNN/example/yolov5s.torchscript.pnnx.param","/home/hupeng/code/github/EasyNN/example/yolov5s.torchscript.pnnx.bin");
+    net.loadModel(\
+    "/home/hp/code/github/EasyNN/example/yolov5s.torchscript.pnnx.param",\
+    "/home/hp/code/github/EasyNN/example/yolov5s.torchscript.pnnx.bin"\
+    );
+
     net.input(0,in);
     
     const int target_size = 640;
     const float prob_threshold = 0.25f;
-    const float nms_threshold = 0.45f;
+    
 
-    std::vector<Object> proposals;
+    
 
     {
         easynn::Mat out;
-        net.extractBlob(139,out);
+        net.extractBlob(150,out);
 
         easynn::Mat anchors(6);
         anchors[0] = 10.f;
@@ -320,7 +307,7 @@ int main()
 
     {
         easynn::Mat out;
-        net.extractBlob(141,out);
+        net.extractBlob(148,out);
         easynn::Mat anchors(6);
         anchors[0] = 30.f;
         anchors[1] = 61.f;
@@ -338,7 +325,7 @@ int main()
     // stride 32
     {
         easynn::Mat out;
-        net.extractBlob(144,out);
+        net.extractBlob(146,out);
         easynn::Mat anchors(6);
         anchors[0] = 116.f;
         anchors[1] = 90.f;
@@ -352,15 +339,49 @@ int main()
 
         proposals.insert(proposals.end(), objects32.begin(), objects32.end());
     }
+}
 
+int main()
+{
+    std::string image_path = "/home/hp/code/github/EasyNN/images/zidane.jpg";
+    cv::Mat image = cv::imread(image_path, 1);
+    if (image.empty())
+    {
+        fprintf(stderr, "cv::imread %s failed\n", image_path.c_str());
+        return -1;
+    }
+    
+    // 计算缩放系数
+    float h = image.rows;
+    float w = image.cols;
+    float h_s = 640/h;
+    float w_s = 640/w;
+    
+    //cv::Mat to EasyNN Mat
+    easynn::Mat in;
+    pretreatment(image,in,640,640);
 
+    //图片归一化
+    normize(in);
+
+    //proposals里保存的是检测框
+    std::vector<Object> proposals;
+    yolo_detect(in,proposals);
+
+    //对所有的检测框，按置信度排序，方便NMS做处理
     qsort_descent_inplace(proposals);
 
-    // apply nms with nms_threshold
+
+    //picked里保存的是NMS后，保存下来的框的索引
     std::vector<int> picked;
+    const float nms_threshold = 0.45f;
     nms_sorted_bboxes(proposals, picked, nms_threshold);
 
+
+
     int count = picked.size();
+
+    //objects保存的是NMS后的框，并除以缩放系数，返回到原始图像
     std::vector<Object> objects;
     objects.resize(count);
     for (int i = 0; i < count; i++)
@@ -368,10 +389,10 @@ int main()
         objects[i] = proposals[picked[i]];
 
         // adjust offset to original unpadded
-        float x0 = (objects[i].rect.x ) / 1;
-        float y0 = (objects[i].rect.y ) / 1;
-        float x1 = (objects[i].rect.x + objects[i].rect.width ) / 1;
-        float y1 = (objects[i].rect.y + objects[i].rect.height) / 1;
+        float x0 = (objects[i].rect.x ) / w_s;
+        float y0 = (objects[i].rect.y ) / h_s;
+        float x1 = (objects[i].rect.x + objects[i].rect.width ) / w_s;
+        float y1 = (objects[i].rect.y + objects[i].rect.height) / h_s;
 
         objects[i].rect.x = x0;
         objects[i].rect.y = y0;
@@ -379,6 +400,7 @@ int main()
         objects[i].rect.height = y1 - y0;
     }
 
+    // 绘制检测框
     draw_objects(image,objects);
     return 0;
 }
