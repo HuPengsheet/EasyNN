@@ -275,8 +275,8 @@ static void yolo_detect(const easynn::Mat in,std::vector<Object>& proposals)
 {
     easynn::Net net;
     net.loadModel(\
-    "/home/hp/code/github/EasyNN/example/yolov5s.torchscript.pnnx.param",\
-    "/home/hp/code/github/EasyNN/example/yolov5s.torchscript.pnnx.bin"\
+    "../example/yolov5s.torchscript.pnnx.param",\
+    "../example/yolov5s.torchscript.pnnx.bin"\
     );
 
     net.input(0,in);
@@ -343,7 +343,7 @@ static void yolo_detect(const easynn::Mat in,std::vector<Object>& proposals)
 
 int main()
 {
-    std::string image_path = "/home/hp/code/github/EasyNN/images/zidane.jpg";
+    std::string image_path = "../images/bus.jpg";
     cv::Mat image = cv::imread(image_path, 1);
     if (image.empty())
     {
