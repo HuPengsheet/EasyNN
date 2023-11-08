@@ -61,6 +61,7 @@ Mat Mat::depth(int z) const
 {
     return Mat(w, h, (unsigned char*)data + (size_t)w * h * z * elemsize, elemsize);
 }
+
 Mat Mat::channel(int _c)
 {
     Mat m(w, h, d, (unsigned char*)data + cstep * _c * elemsize, elemsize);
