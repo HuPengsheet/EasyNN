@@ -26,8 +26,6 @@ public:
     std::vector<Mat> blob_mats;
     std::vector<Layer* > layers;
 
-    
-    
     size_t layer_num;
     size_t blob_num;
     Optional op;
