@@ -1,9 +1,8 @@
-#include<iostream>
 #include"adaptiveavgpool.h"
 #include"benchmark.h"
+
 namespace easynn{
-
-
+    
 AdaptivePool::AdaptivePool()
 {
     one_blob_only=true;
@@ -57,7 +56,7 @@ int AdaptivePool::forward(const Mat& input,Mat& output,const Optional& op)
         }
     }
     double end = get_current_time();
-    printf("%-15s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),input.c,output.c,input.h,input.w,out_h,out_w,end-start);
+    printf("%-25s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),input.c,output.c,input.h,input.w,out_h,out_w,end-start);
     return 0;
 }
 
