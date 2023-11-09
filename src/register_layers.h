@@ -29,7 +29,7 @@
     }
 
 
-typedef  easynn::Layer*(*layer_factory)();
+typedef  easynn::Layer*(*layer_factory)();   //定义了一个函数指针，Layer*类型
 
 register_layer(Input);
 register_layer(Output);
