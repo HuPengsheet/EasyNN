@@ -27,9 +27,4 @@ namespace easynn{
         return 0;
     }
 
-    int Layer::forwardInplace()
-    {
-        return 0;
-    }
-
 }//namespace

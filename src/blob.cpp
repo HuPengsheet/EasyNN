@@ -9,4 +9,4 @@ Blob::Blob()
     shape = Mat();
 }
 
-} // namespace ncnn
+} // namespace easynn
