@@ -99,7 +99,7 @@ int main()
     
     //find Max score class
     int cls = findMax(result);
-    printf("cls = %d",cls);
+    printf("cls = %d\n",cls);
 
     return 0;
 }

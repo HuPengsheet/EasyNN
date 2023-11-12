@@ -28,6 +28,7 @@ int Mat::isEmpty () const
 {
     return data == 0 || total() == 0;
 }
+
 int Mat::total() const
 {
     return cstep*c*elemsize;

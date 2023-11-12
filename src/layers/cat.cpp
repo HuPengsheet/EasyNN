@@ -1,4 +1,3 @@
-#include<iostream>
 #include<string.h>
 #include"cat.h"
 #include"mat.h"
@@ -16,14 +15,13 @@ int Cat::forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Op
     int dims = input[0].dims;
     size_t elemsize = input[0].elemsize;
 
-    if (dims == 3  && dim == 0)
+    if (dims == 3)
     {
-        // concat dim
+    
         int w = input[0].w;
         int h = input[0].h;
 
-
-        // total channels
+        // 总共的channels数
         int top_channels = 0;
         for (size_t b = 0; b < input.size(); b++)
         {
@@ -48,10 +46,14 @@ int Cat::forward(const std::vector<Mat>& input,std::vector<Mat>& output,const Op
 
             q += channels;
         }
+    }
+    else
+    {
+        printf("Cat do not support now %d dims",dims);
     }    
 
     double end = get_current_time();
-    printf("%-15s,cat forward :time=%fms\n",name.c_str(),end-start);
+    printf("%-25s,cat forward :time=%fms\n",name.c_str(),end-start);
     return 0;
 }
 

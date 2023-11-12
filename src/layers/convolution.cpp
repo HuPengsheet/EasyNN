@@ -99,7 +99,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
     }
     
 
-
+    //计算卷积核在输入数据上的偏移
     size_t kernel_max = kernel_size[0]*kernel_size[1];
     std::vector<int> kernel_index(kernel_max);
     {
@@ -117,6 +117,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
             q +=gap;
         }
     }
+
     #pragma omp parallel for num_threads(op.num_thread)
     for(int i=0;i<out_channels;i++)
     {
@@ -152,7 +153,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
         }
     }
     double end =get_current_time();
-    printf("%-15s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),in_channels,out_channels,input.h,input.w,out_h,out_w,end-start);
+    printf("%-25s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),in_channels,out_channels,input.h,input.w,out_h,out_w,end-start);
 
     return 0;
 }
