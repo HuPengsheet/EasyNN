@@ -38,8 +38,6 @@ TEST(Relu,forward)
     r1.forward(m1,out_m1,option);
     r1.forward(m2,out_m2,option);
     r1.forward(m3,out_m3,option);
-    printMat(out_m3);
-    printMat(m6);
     EXPECT_EQ(compareMat(out_m1,m4),0);
     EXPECT_EQ(compareMat(out_m2,m5),0);
     EXPECT_EQ(compareMat(out_m3,m6),0);

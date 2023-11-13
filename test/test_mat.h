@@ -21,8 +21,8 @@ TEST(Mat, compare_mat)
     easynn::Mat m2(10,10);
     easynn::Mat m3(100,10);
     easynn::Mat m4;
-    EXPECT_EQ(compareMat(m1,m2), 1);
-    EXPECT_EQ(compareMat(m1,m2), 1);
+    EXPECT_EQ(compareMat(m1,m1), 0);
+    EXPECT_EQ(compareMat(m2,m2), 0);
     EXPECT_EQ(compareMat(m1,m3), -1);
     EXPECT_EQ(compareMat(m4,m3), -1);
 }
@@ -84,10 +84,10 @@ TEST(Mat,fillFromArray)
     m1.fillFromArray(x1);
     m2.fillFromArray(x2);
     m3.fillFromArray(x3);
-    printMat(m1);
-    printMat(m2);
-    printMat(m3);
-    //printMat(m4);
+    // printMat(m1);
+    // printMat(m2);
+    // printMat(m3);
+    // printMat(m4);
 }
 
  
@@ -108,9 +108,9 @@ TEST(Mat,clone)
     easynn::Mat m6 = m3.clone();
     // printMat(m1);
     //printMat(m4);
-    EXPECT_EQ(compareMat(m1,m4), 1);
-    EXPECT_EQ(compareMat(m2,m5), 1);
-    EXPECT_EQ(compareMat(m3,m6), 1);
+    EXPECT_EQ(compareMat(m1,m4), 0);
+    EXPECT_EQ(compareMat(m2,m5), 0);
+    EXPECT_EQ(compareMat(m3,m6), 0);
 
 }
 

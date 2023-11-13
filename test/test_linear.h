@@ -62,16 +62,16 @@ std::vector<float> linear_out = {-0.4242,  0.0332, -0.0244, -0.0878, -0.0987, -0
 TEST(LINEAR,loadBin)
 {
     easynn::Net net;
-    EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/linear.pnnx.param",\
-    "/home/hupeng/code/github/EasyNN/example/linear.pnnx.bin"),0);
+    EXPECT_EQ(net.loadModel("../example/linear.pnnx.param",\
+    "../example/linear.pnnx.bin"),0);
 }
 
 
 TEST(LINEAR,forward)
 {
     easynn::Net net;
-    EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/linear.pnnx.param",\
-    "/home/hupeng/code/github/EasyNN/example/linear.pnnx.bin"),0);
+    EXPECT_EQ(net.loadModel("../example/linear.pnnx.param",\
+    "../example/linear.pnnx.bin"),0);
 
     easynn::Mat input(10);
     input.fillFromArray(linear_input);
@@ -83,8 +83,6 @@ TEST(LINEAR,forward)
     easynn::Mat m;
     net.extractBlob(1,m);
 
-    printMat(m);
-    printMat(output);
     EXPECT_EQ(compareMat(m,output),0);
 
 }

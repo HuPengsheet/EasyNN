@@ -246,7 +246,5 @@ TEST(MAXPOOL,forward4)
     easynn::Optional option;
     easynn::Mat m1;
     mxpool.forward(input,m1,option);
-    printMat(output);
-    printMat(m1);
     EXPECT_EQ(compareMat(output,m1),0);
 }

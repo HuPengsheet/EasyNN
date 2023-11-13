@@ -316,7 +316,5 @@ TEST(EXPRESSION,forward3)
     outputs.push_back(m1);
 
     exp.forward(inputs,outputs,option); 
-    printMat(out_mat);
-    printMat(outputs[0]);
     EXPECT_EQ(compareMat(out_mat,outputs[0]),0);
 }

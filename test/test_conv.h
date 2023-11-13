@@ -278,8 +278,8 @@ std::vector<std::vector<std::vector<float>>> conv_out_data = \
 TEST(CONV,conv_loadParam)
 {
     easynn::Net net;
-    EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/conv.pnnx.param",\
-    "/home/hupeng/code/github/EasyNN/example/conv.pnnx.bin"),0);
+    EXPECT_EQ(net.loadModel("../example/conv.pnnx.param",\
+    "../example/conv.pnnx.bin"),0);
     easynn::Mat input(12,12,3);
     easynn::Mat output(10,10,3);
     input.fillFromArray(conv_input_data);
@@ -311,8 +311,8 @@ TEST(CONV,padding)
 TEST(CONV,conv2)
 {
     easynn::Net net;
-    EXPECT_EQ(net.loadModel("/home/hupeng/code/github/EasyNN/example/conv2.pnnx.param",\
-    "/home/hupeng/code/github/EasyNN/example/conv2.pnnx.bin"),0);
+    EXPECT_EQ(net.loadModel("../example/conv2.pnnx.param",\
+    "../example/conv2.pnnx.bin"),0);
     easynn::Mat input(16,16,3);
     easynn::Mat output(2,2,10);
     input.fillFromArray(conv_input_data2);
