@@ -47,7 +47,7 @@ tar -xf model.tar.xz
 链接: https://pan.baidu.com/s/1RgbSGVNSfYZZtos6Y4Bedw 提取码: h9u6 
 ```
 
-第三步：运行res18推理 和yolov5推理代码，可以看到对应的效果图（）
+第三步：运行res18推理 和yolov5推理代码，可以看到对应的效果图
 
 ```shell
 #进入到build目前下
