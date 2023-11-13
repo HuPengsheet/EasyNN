@@ -44,7 +44,7 @@ wget https://github.com/HuPengsheet/EasyNN/releases/download/EasyNN1.0-model-fil
 tar -xf model.tar.xz
 
 方法二：通过百度云下载，把下载好的文件解压到，项目目录下的example下
-链接: 链接: https://pan.baidu.com/s/1RgbSGVNSfYZZtos6Y4Bedw 提取码: h9u6 
+链接: https://pan.baidu.com/s/1RgbSGVNSfYZZtos6Y4Bedw 提取码: h9u6 
 ```
 
 第三步：运行res18推理 和yolov5推理代码，可以看到对应的效果图（）
@@ -73,4 +73,4 @@ tar -xf model.tar.xz
 
 本项目中很大一部分代码参考了优秀的推理框架[ncnn](https://github.com/Tencent/ncnn)
 
-部分代码借鉴了**[KuiperInfer](https://github.com/zjhellofss/KuiperInfer)**
+部分代码借鉴了[KuiperInfer](https://github.com/zjhellofss/KuiperInfer)**
