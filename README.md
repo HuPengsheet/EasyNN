@@ -1,6 +1,6 @@
 <img src="./images/logo.png" />
 
-​EasyNN是一个面向教学而研发的推理框架，旨在帮助大家在最短时间内写出一个支持ResNet和YOLOv5等模型的深度学习推理框架。**简单**是EasyNN最大的特点，只需要掌握C++基本语法和神经网络基础知识，你就可以在15天内，写出一个属于自己的网络推理框架。
+EasyNN是一个面向教学而研发的推理框架，旨在帮助大家在最短时间内写出一个支持ResNet和YOLOv5等模型的深度学习推理框架。**简单**是EasyNN最大的特点，只需要掌握C++基本语法和神经网络基础知识，你就可以在15天内，写出一个属于自己的网络推理框架。
 
 # 特性
 
@@ -21,7 +21,56 @@
 
 - **常见算子的实现方法**：常见的卷积算子(Conv2d)、池化算子(MaxPool2d)等的实现。
 
-    
+   
 
 # 编译与运行
 
+第一步：下载并编译代码
+
+```shell
+git clone https://github.com/HuPengsheet/EasyNN.git
+cd EasyNN
+mkdir build && cd build
+cmake ..
+make -j4
+```
+
+第二步：下载对应的模型权重
+
+```shell
+方法一：使用wget从github上下载
+cd ../example
+wget https://github.com/HuPengsheet/EasyNN/releases/download/EasyNN1.0-model-file/model.tar.xz
+tar -xf model.tar.xz
+
+方法二：通过百度云下载，把下载好的文件解压到，项目目录下的example下
+链接: 链接: https://pan.baidu.com/s/1RgbSGVNSfYZZtos6Y4Bedw 提取码: h9u6 
+```
+
+第三步：运行res18推理 和yolov5推理代码，可以看到对应的效果图（）
+
+```shell
+#进入到build目前下
+
+#运行res18的代码
+./example/res18
+
+#运行yolov5s的代码
+./example/yolov5s
+```
+
+第四部（可选）：运行单元测试
+
+```shell
+./test/run_test
+```
+
+# 开发文档
+
+未完待续
+
+# 致谢
+
+本项目中很大一部分代码参考了优秀的推理框架[ncnn](https://github.com/Tencent/ncnn)
+
+部分代码借鉴了**[KuiperInfer](https://github.com/zjhellofss/KuiperInfer)**
