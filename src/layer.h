@@ -22,15 +22,15 @@ public:
 
 public:
 
-    bool one_blob_only;  //该算子是否只有一个输入
+    bool one_blob_only;  
 
 public:
 
-    std::string type;   //算子的类型
-    std::string name;   //算在的名字
+    std::string type;  
+    std::string name;   
 
-    std::vector<int> bottoms;   //该算子的输入blob的索引
-    std::vector<int> tops;      //该算子的输出blob的索引
+    std::vector<int> bottoms;   
+    std::vector<int> tops;      
 
 };
 
