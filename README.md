@@ -69,6 +69,7 @@ tar -xf model.tar.xz
 - [测试框架](https://github.com/HuPengsheet/EasyNN/blob/main/documents/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6.md)
 - [内存分配](https://github.com/HuPengsheet/EasyNN/blob/main/documents/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D.md)
 - [Mat类设计](https://github.com/HuPengsheet/EasyNN/blob/main/documents/Mat%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1.md)
+- [Net类设计](https://github.com/HuPengsheet/EasyNN/blob/main/documents/Net%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1.md)
 - 未完待续
 
 # 致谢
