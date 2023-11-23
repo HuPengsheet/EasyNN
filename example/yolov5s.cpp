@@ -1,4 +1,5 @@
 #include"net.h"
+#include"benchmark.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
@@ -278,7 +279,7 @@ static void yolo_detect(const easynn::Mat in,std::vector<Object>& proposals)
     "../example/yolov5s.torchscript.pnnx.param",\
     "../example/yolov5s.torchscript.pnnx.bin"\
     );
-
+    
     net.input(0,in);
     
     const int target_size = 640;
@@ -366,7 +367,11 @@ int main()
 
     //proposals里保存的是检测框
     std::vector<Object> proposals;
+    double start = easynn::get_current_time();
     yolo_detect(in,proposals);
+    double end = easynn::get_current_time();
+
+    printf("total time is %f ms\n",end-start);
 
     //对所有的检测框，按置信度排序，方便NMS做处理
     qsort_descent_inplace(proposals);
