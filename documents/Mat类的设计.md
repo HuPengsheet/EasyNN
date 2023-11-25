@@ -505,10 +505,10 @@ void Mat::fillFromArray(std::vector<std::vector<float>> x)
 
 ## Mat的内存分布图
 
- 	以生成一个3×3×3的矩阵为例
+ 	以生成一个3×2×4的矩阵为例
 
 ```c++
-EastNN::Mat mat1(3,3,3)
+EastNN::Mat mat1(3,2,4)
 ```
 
 ​	会调用如下的构造函数
@@ -557,23 +557,16 @@ void Mat::create(int _w,int _h,int _c,size_t _elemsize)
 
 ​	EasyNN的Mat是在channel维度上对齐，这主要是因为EasyNN在每个维度上用openmp多线程加速，已经考虑到armv8加速的原因。alignSize是字节对齐的函数，，就一行代码`(sz + n - 1) & -n;`给大家举个例子说明：
 
-​	sz=w×h×elemsize=3×3×4=36,则
+​	sz=w×h×elemsize=3×2×4=24,则
 
 ​	(sz + n - 1) & -n
 
-​	=(36+16-1)&(-16)
+​	=32
 
-​	=(51)&(-16)
-
-​	=(00110011)&(11110000)
-
-​	=(00110000)
-
-​	=48
-
-​	然后48/4=12，则cstep=12
+​	然后32/4=8，则cstep=8
 
 类似的totalsize也会字节对齐，然后再使用fastMalloc分配内存，实际分配的内存还会对64个字节(这个在前面提到过)，最后Mat在内存中的图是这样的：
+![picture](../images/内存.png)
 
 ## Mat的浅拷贝
 
