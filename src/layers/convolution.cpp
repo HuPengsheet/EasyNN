@@ -99,7 +99,7 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
     }
     
 
-    //¼ÆËã¾í»ıºËÔÚÊäÈëÊı¾İÉÏµÄÆ«ÒÆ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Æ«ï¿½ï¿½
     size_t kernel_max = kernel_size[0]*kernel_size[1];
     std::vector<int> kernel_index(kernel_max);
     {
@@ -213,6 +213,24 @@ int Convolution::loadBin(std::map<std::string, pnnx::Attribute>& attrs)
         }
     }
     return 0;   
+}
+
+void im2col(const Mat & input,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride)
+{
+    int input_w = input.w;
+    int input_h = input.h;
+
+    int kernel_w = kernel_size[0];
+    int kernel_h = kernel_size[1];
+
+    int stride_w = stride[0];
+    int stride_h = stride[1];
+
+    int out_w = (input_w-kernel_w)/stride_w+1;
+    int out_h = (input_h-kernel_h)/stride_h+1;
+
+    output.create(out_w,out_h);
+    
 }
 
 }//namespace
