@@ -37,7 +37,7 @@ public:
     Mat bias;
 };
 
-void im2col(const Mat & input,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride);
+void im2col(const Mat & input,Mat& output,const Optional& opt,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation);
 
 
 } //namespace

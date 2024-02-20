@@ -215,10 +215,11 @@ int Convolution::loadBin(std::map<std::string, pnnx::Attribute>& attrs)
     return 0;   
 }
 
-void im2col(const Mat & input,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride)
+void im2col(const Mat & input,Mat& output,const Optional& opt,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation)
 {
     int input_w = input.w;
     int input_h = input.h;
+    int in_channels=input.c;
 
     int kernel_w = kernel_size[0];
     int kernel_h = kernel_size[1];
@@ -226,10 +227,47 @@ void im2col(const Mat & input,Mat& output,const std::vector<int> kernel_size,con
     int stride_w = stride[0];
     int stride_h = stride[1];
 
+    int dilation_w = dilation[0];
+    int dilation_h = dilation[1];
+
+
     int out_w = (input_w-kernel_w)/stride_w+1;
     int out_h = (input_h-kernel_h)/stride_h+1;
 
-    output.create(out_w,out_h);
+    int size = out_w*out_h;
+    int maxk = kernel_w * kernel_h;
+    output.create(size,maxk*in_channels);
+
+    const int gap = input_w * stride_h - out_w * stride_w;
+
+    #pragma omp parallel for num_threads(opt.num_thread)
+    for(int p=0;p<in_channels;p++)
+    {
+        const Mat img = input.channel(p);
+        float* ptr = output.row(p * maxk);
+        
+        for (int u = 0; u < kernel_h; u++)
+        {
+            for (int v = 0; v < kernel_w; v++)
+            {
+                const float* sptr = img.row(dilation_h * u) + dilation_w * v;
+
+                for (int i = 0; i < out_h; i++)
+                {
+                    for (int j = 0; j < out_w; j++)
+                    {
+                        ptr[0] = sptr[0];
+
+                        sptr += stride_w;
+                        ptr += 1;
+                    }
+
+                    sptr += gap;
+                }
+            }
+        }
+    }
+
     
 }
 
