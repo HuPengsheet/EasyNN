@@ -271,4 +271,54 @@ void im2col(const Mat & input,Mat& output,const Optional& opt,const std::vector<
     
 }
 
+void kernel2col(const Mat & input,Mat& output,const Optional& opt)
+{
+    output = input.clone();
+    output = output.reshape(output.w*output.h*output.d,output.c);
+    
+}
+
+void col2im(const Mat & input,Mat& output,const Optional& opt,const int out_w,const int out_h,const int out_channels)
+{
+    output = input.clone();
+    output = output.reshape(out_w,out_h,out_channels);
+}
+
+void gemm(const Mat & a,const Mat& b,Mat& c,const Optional& opt)
+{
+    if(a.w!=b.h) 
+    {
+        printf("the shape can not multi \n");
+        return;
+    }
+
+    if(a.dims!=2 ||b.dims!=2) 
+    {
+        printf("the dims are not 2 \n");
+        return;
+    }
+
+    int m=a.h;
+    int k=a.w;
+    int n=b.w;
+
+    c.create(n,m);
+
+    for(int i=0;i<m;i++)
+    {
+        float * p = c.row(i);
+        for(int j=0;j<n;j++)
+        {
+            float sum=0;
+            for(int x=0;x<k;x++)
+            {
+                sum+=a[i*k+x]*b[x*n+j];
+            }
+            p[j] = sum;
+        }
+        
+    }
+
+}
+
 }//namespace
