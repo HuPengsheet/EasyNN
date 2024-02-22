@@ -6,21 +6,21 @@
 #include<utility>
 
 #include"layer.h"
-#include"layers/input.h"
-#include"layers/output.h"
-#include"layers/relu.h"
-#include"layers/adaptiveavgpool.h"
-#include"layers/convolution.h"
-#include"layers/expression.h"
-#include"layers/flatten.h"
-#include"layers/linear.h"
-#include"layers/maxpool.h"
-#include"layers/cat.h"
-#include"layers/contiguous.h"
-#include"layers/permute.h"
-#include"layers/silu.h"
-#include"layers/upsample.h"
-#include"layers/view.h"
+#include"layers/cxx/input.h"
+#include"layers/cxx/output.h"
+#include"layers/cxx/relu.h"
+#include"layers/cxx/adaptiveavgpool.h"
+#include"layers/cxx/convolution.h"
+#include"layers/cxx/expression.h"
+#include"layers/cxx/flatten.h"
+#include"layers/cxx/linear.h"
+#include"layers/cxx/maxpool.h"
+#include"layers/cxx/cat.h"
+#include"layers/cxx/contiguous.h"
+#include"layers/cxx/permute.h"
+#include"layers/cxx/silu.h"
+#include"layers/cxx/upsample.h"
+#include"layers/cxx/view.h"
 
 #define register_layer(name) \
     easynn::Layer* name##Factory()\
@@ -29,7 +29,7 @@
     }
 
 
-typedef  easynn::Layer*(*layer_factory)();   //定义了一个函数指针，Layer*类型
+typedef  easynn::Layer*(*layer_factory)();   
 
 register_layer(Input);
 register_layer(Output);
