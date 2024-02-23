@@ -2,9 +2,12 @@
 #define EASYNN_NNCUDA_H
 
 #ifdef EASTNN_USE_CUDA
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <stdio.h>
+
+
+
+
+#define EASYNN_MALLOC_ALIGN 64
+#define EASYNN_MALLOC_OVERREAD 64
 
 #define CHECK(call)                                   \
 do                                                    \
@@ -25,7 +28,9 @@ do                                                    \
 
 namespace easynn{
 
-int getGpuNum()；
+int getGpuNum();
+void* fastCudaMalloc(size_t size);
+void  fastCudaFree(void * ptr);
 
 } //namespace easynn
 

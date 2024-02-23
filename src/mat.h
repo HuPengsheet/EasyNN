@@ -94,7 +94,7 @@ Mat::operator const T*() const
     return (T*)data;
 }
 
-}
+
 
 
 #ifdef EASTNN_USE_CUDA
@@ -108,7 +108,7 @@ public:
     CUMat(int _w,int _h,size_t _elemsize=4u); 
     CUMat(int _w,int _h,int _c,size_t _elemsize=4u); 
     CUMat(int _w,int _h,int _d,int _c,size_t _elemsize=4u); 
-    CUMat(const Mat& m);
+    CUMat(const CUMat& m);
 
     CUMat(int _w,void* data,size_t _elemsize=4u); 
     CUMat(int _w,int _h,void* data,size_t _elemsize=4u); 
@@ -133,10 +133,10 @@ public:
     void fill(int x);
     void fill(float x);
 
-    CUMAT reshape(int _w) const;
-    CUMAT reshape(int _w, int _h) const;
-    CUMAT reshape(int _w, int _h, int _c) const;
-    CUMAT reshape(int _w, int _h, int _d, int _c) const;
+    CUMat reshape(int _w) const;
+    CUMat reshape(int _w, int _h) const;
+    CUMat reshape(int _w, int _h, int _c) const;
+    CUMat reshape(int _w, int _h, int _d, int _c) const;
 
     void fillFromArray(std::vector<int> x);
     void fillFromArray(std::vector<std::vector<int>> x);
@@ -154,14 +154,14 @@ public:
 
     float* row(int y);
     float* row(int y) const;
-    Mat depth(int z);
-    Mat depth(int z) const;
-    Mat channel(int _c);
-    Mat channel(int _c) const ;
+    CUMat depth(int z);
+    CUMat depth(int z) const;
+    CUMat channel(int _c);
+    CUMat channel(int _c) const ;
     
     int isEmpty () const;
     int total() const;
-    Mat clone() const;
+    CUMat clone() const;
     
 
     size_t dims;     //数据的维度 0 or 1 or 2 or 3 or 4
@@ -175,8 +175,10 @@ public:
     int* refcount;   //引用计数的地址 
     
 };
+
 }
 
 #endif //EASTNN_USE_CUDA
+
 
 #endif //EASYNN_MAT_H

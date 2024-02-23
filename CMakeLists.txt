@@ -11,7 +11,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)  # 禁止使用编译器特有扩展
 
 option(EASTNN_USE_CUDA "enable cuda " ON)
 
+if(EASTNN_USE_CUDA)
+    add_definitions(-DEASTNN_USE_CUDA=1)  
+    enable_language(CUDA)
+endif()
+
 file(GLOB SRC src/*.cpp)
+file(GLOB CUDA_SRC src/*.cu)
 file(GLOB LAYERS_SRC src/layers/cxx/*.cpp)
 
 set(INCLUDE ${CMAKE_SOURCE_DIR}/src)
@@ -20,4 +26,4 @@ set(EXAMPLE ${CMAKE_SOURCE_DIR}/example)
 
 add_subdirectory(src)
 add_subdirectory(test)
-add_subdirectory(example)
+#add_subdirectory(example)

@@ -2,9 +2,6 @@
 #define EASYNN_ALLOCATOR_H
 
 #include <stdlib.h>
-#include <cuda_runtime.h>
-#include <cuda.h>
-#include "nncuda.h"
 
 #define EASYNN_MALLOC_ALIGN 64
 #define EASYNN_MALLOC_OVERREAD 64
@@ -30,23 +27,5 @@ static  void fastFree(void* ptr)
         free(ptr);
     }
 }
-
-#ifdef EASTNN_USE_CUDA
-
-static void* fastCudaMalloc(size_t size)
-{
-    void *ptr = 0;
-    check(cudaMalloc((void **)&ptr, size + EASYNN_MALLOC_OVERREAD));
-    return ptr;
-}
-
-static void fastCudaFree(void * ptr)
-{
-    void *ptr = 0;
-    check(cudaFree(cudaFree));
-}
-
-#endif
-
 
 #endif
