@@ -644,11 +644,11 @@ Mat::~Mat()
 {
     clean();
 }
+
 Mat::Mat():dims(0),c(0),d(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
 {
     
 }
-
 Mat::Mat(int _w,size_t _elemsize):dims(0),c(0),d(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
 {
     Mat::create(_w,_elemsize);
@@ -743,4 +743,10 @@ Mat Mat::clone() const
     return m;
 }
 
-}
+#ifndef EASTNN_USE_CUDA
+        
+
+
+#endif
+
+} //namespace

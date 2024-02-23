@@ -1,5 +1,4 @@
 #include"test_ulti.h"
-#include"test_im2col.h"
 
 int main()
 {
