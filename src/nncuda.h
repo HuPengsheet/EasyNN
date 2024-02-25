@@ -25,10 +25,22 @@ do                                                    \
     }                                                 \
 } while (0)
 
+// CUDA: grid stride looping
+#define CUDA_KERNEL_LOOP(i, n) \
+  for (int i = blockIdx.x * blockDim.x + threadIdx.x; \
+       i < (n); \
+       i += blockDim.x * gridDim.x)
+
+// CUDA: use 512 threads per block
+const int EASYNN_CUDA_NUM_THREADS = 512;
+
+// CUDA: number of blocks for threads.
+inline int CAFFE_GET_BLOCKS(const int N) {
+  return (N + EASYNN_CUDA_NUM_THREADS - 1) / EASYNN_CUDA_NUM_THREADS;
+}
 
 namespace easynn{
 
-int getGpuNum();
 void* fastCudaMalloc(size_t size);
 void  fastCudaFree(void * ptr);
 

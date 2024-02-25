@@ -17,7 +17,7 @@ if(EASTNN_USE_CUDA)
 endif()
 
 file(GLOB SRC src/*.cpp)
-file(GLOB CUDA_SRC src/*.cu)
+file(GLOB CUDA_SRC src/*.cu src/layers/cuda/*.cu)
 file(GLOB LAYERS_SRC src/layers/cxx/*.cpp)
 
 set(INCLUDE ${CMAKE_SOURCE_DIR}/src)
