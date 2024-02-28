@@ -1,4 +1,5 @@
 #include"net.h"
+#include"benchmark.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
@@ -95,7 +96,12 @@ int main()
 
     // forward net
     easynn::Mat result;
+    double start = easynn::get_current_time();
     res18(in,result);
+    double end = easynn::get_current_time();
+
+    printf("total time is %f ms\n",end-start);
+    
     
     //find Max score class
     int cls = findMax(result);

@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)  # 禁止使用编译器特有扩展
 
 
 
-option(EASTNN_USE_CUDA "enable cuda " ON)
+option(EASTNN_USE_CUDA "enable cuda " OFF)
 
 if(EASTNN_USE_CUDA)
     add_definitions(-DEASTNN_USE_CUDA=1)  
@@ -26,4 +26,4 @@ set(EXAMPLE ${CMAKE_SOURCE_DIR}/example)
 
 add_subdirectory(src)
 add_subdirectory(test)
-#add_subdirectory(example)
+add_subdirectory(example)

@@ -4,7 +4,10 @@
 #include"convolution.h"
 #include"mat.h"
 #include"benchmark.h"
+
+#ifdef EASTNN_USE_CUDA
 #include"layers/cuda/cuda_gemm.h"
+#endif
 
 namespace easynn{
 
@@ -297,8 +300,6 @@ void im2colGemm(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,c
     int out_h = (input_h-kernel_h)/stride_h+1;
     int out_c = kernel.c;
 
-    printf("%d  %d  %d",out_w,out_h,out_c);
-
     Mat im_col;
     im2col(input,im_col,opt,kernel_size,stride,dilation);
 
@@ -311,6 +312,7 @@ void im2colGemm(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,c
     col2im(out_col,output,opt,out_w,out_h,out_c);
 }
 
+#ifdef EASTNN_USE_CUDA
 void cuda_im2col_gemm_bias(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation,const Optional& opt)
 {
     int input_w = input.w;
@@ -341,7 +343,7 @@ void cuda_im2col_gemm_bias(const Mat& input,const Mat& kernel,const Mat& bias,Ma
 
     col2im(out_col,output,opt,out_w,out_h,out_c);
 
-
 }
 
+#endif
 }//namespace

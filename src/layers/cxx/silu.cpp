@@ -2,8 +2,10 @@
 #include<math.h>
 #include"silu.h"
 #include"benchmark.h"
-#include"layers/cuda/cuda_silu.h"
 
+#ifdef EASTNN_USE_CUDA
+#include"layers/cuda/cuda_silu.h"
+#endif
 namespace easynn{
 
 Silu::Silu()
