@@ -3,7 +3,7 @@
 #include<string.h>
 #include"mat.h"
 #include"allocator.h"
-
+#include"nncuda.h"
 namespace easynn{
 
 void Mat::clean()
@@ -640,15 +640,16 @@ Mat Mat::reshape(int _w, int _h, int _d, int _c) const
     m.cstep = alignSize((size_t)_w * _h * _d * elemsize, 16) / elemsize;
     return m;
 }
+
 Mat::~Mat()
 {
     clean();
 }
+
 Mat::Mat():dims(0),c(0),d(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
 {
     
 }
-
 Mat::Mat(int _w,size_t _elemsize):dims(0),c(0),d(0),h(0),w(0),cstep(0),data(0),refcount(0),elemsize(0)
 {
     Mat::create(_w,_elemsize);
@@ -743,4 +744,5 @@ Mat Mat::clone() const
     return m;
 }
 
-}
+
+} //namespace

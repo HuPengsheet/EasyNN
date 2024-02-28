@@ -94,5 +94,9 @@ Mat::operator const T*() const
     return (T*)data;
 }
 
-}
-#endif
+} //namespace
+
+
+
+
+#endif //EASYNN_MAT_H

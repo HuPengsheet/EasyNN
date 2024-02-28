@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 
-
 #define EASYNN_MALLOC_ALIGN 64
 #define EASYNN_MALLOC_OVERREAD 64
 
@@ -28,7 +27,5 @@ static  void fastFree(void* ptr)
         free(ptr);
     }
 }
-
-
 
 #endif

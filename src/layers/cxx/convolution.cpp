@@ -4,6 +4,11 @@
 #include"convolution.h"
 #include"mat.h"
 #include"benchmark.h"
+
+#ifdef EASTNN_USE_CUDA
+#include"layers/cuda/cuda_gemm.h"
+#endif
+
 namespace easynn{
 
 Convolution::Convolution()
@@ -78,12 +83,12 @@ void Convolution::copy_make_border_image(const Mat& input,Mat& input_pad)
 int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
 {   
     double start=get_current_time();
-
+    
     int input_h = input.h;
     int input_w = input.w;
     int out_h = (input_h+2*padding[0]-dilation[0]*(kernel_size[0]-1)-1)/stride[0]+1;
     int out_w = (input_h+2*padding[1]-dilation[1]*(kernel_size[1]-1)-1)/stride[1]+1;
-    output.create(out_w,out_h,out_channels);
+    //output.create(out_w,out_h,out_channels);
     
     Mat input_pad=input;
     if(strcmp(padding_mode.c_str(), "zeros")==0)
@@ -97,61 +102,16 @@ int Convolution::forward(const Mat& input,Mat& output,const Optional& op)
         printf("do not support padding mode %s\n",padding_mode.c_str());
         return -1;
     }
+
+#ifdef EASTNN_USE_CUDA
+    cuda_im2col_gemm_bias(input_pad,weight,bias,output,kernel_size,stride,dilation,op);
+    double cuda_end =get_current_time();
+    printf("%-25s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),in_channels,out_channels,input.h,input.w,out_h,out_w,cuda_end-start);
+    return 0;
+#endif
+
+    im2colGemm(input_pad,weight,bias,output,kernel_size,stride,dilation,op);
     
-
-    //��������������������ϵ�ƫ��
-    size_t kernel_max = kernel_size[0]*kernel_size[1];
-    std::vector<int> kernel_index(kernel_max);
-    {
-        int gap = input_w * dilation[1] - kernel_size[1] * dilation[0];
-        int p=0;
-        int q=0;
-        for(int i=0;i<kernel_size[0];i++)
-        {
-            for(int j=0;j<kernel_size[1];j++)
-            {
-                kernel_index[p] = q;
-                p++;
-                q+=dilation[1];
-            }
-            q +=gap;
-        }
-    }
-
-    #pragma omp parallel for num_threads(op.num_thread)
-    for(int i=0;i<out_channels;i++)
-    {
-        float* ptr = output.channel(i);
-
-        for(int j=0;j<out_h;j++)
-        {
-            for(int k=0;k<out_w;k++)
-            {
-                float sum=0.f;
-                if(use_bias)
-                    sum=bias[i];
-
-                float* kptr =weight.channel(i);
-                for(int q = 0; q < in_channels; q++)
-                {
-                    const Mat m = input_pad.channel(q);
-                    const float* sptr = m.row(j * stride[0]) + k * stride[1];
-
-                    for(int m=0;m<kernel_max;m++)
-                    {
-                        float val = sptr[kernel_index[m]];
-                        float wt = kptr[m];
-                        sum +=val*wt;
-                    }
-
-                    kptr += kernel_max;
-                }
-
-                ptr[k] = sum;
-            } 
-            ptr +=out_w;
-        }
-    }
     double end =get_current_time();
     printf("%-25s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),in_channels,out_channels,input.h,input.w,out_h,out_w,end-start);
 
@@ -237,8 +197,9 @@ void im2col(const Mat & input,Mat& output,const Optional& opt,const std::vector<
     int size = out_w*out_h;
     int maxk = kernel_w * kernel_h;
     output.create(size,maxk*in_channels);
-
     const int gap = input_w * stride_h - out_w * stride_w;
+
+   
 
     #pragma omp parallel for num_threads(opt.num_thread)
     for(int p=0;p<in_channels;p++)
@@ -284,7 +245,7 @@ void col2im(const Mat & input,Mat& output,const Optional& opt,const int out_w,co
     output = output.reshape(out_w,out_h,out_channels);
 }
 
-void gemm(const Mat & a,const Mat& b,Mat& c,const Optional& opt)
+void gemm(const Mat & a,const Mat& b,const Mat& bias,Mat& c,const Optional& opt)
 {
     if(a.w!=b.h) 
     {
@@ -306,6 +267,7 @@ void gemm(const Mat & a,const Mat& b,Mat& c,const Optional& opt)
 
     for(int i=0;i<m;i++)
     {
+        float bia=bias[i];
         float * p = c.row(i);
         for(int j=0;j<n;j++)
         {
@@ -314,11 +276,74 @@ void gemm(const Mat & a,const Mat& b,Mat& c,const Optional& opt)
             {
                 sum+=a[i*k+x]*b[x*n+j];
             }
-            p[j] = sum;
+            p[j] = sum+bia;
         }
         
     }
 
 }
 
+void im2colGemm(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation,const Optional& opt)
+{
+    int input_w = input.w;
+    int input_h = input.h;
+    int in_channels=input.c;
+    int kernel_w = kernel_size[0];
+    int kernel_h = kernel_size[1];
+
+    int stride_w = stride[0];
+    int stride_h = stride[1];
+
+    int dilation_w = dilation[0];
+    int dilation_h = dilation[1];
+    int out_w = (input_w-kernel_w)/stride_w+1;
+    int out_h = (input_h-kernel_h)/stride_h+1;
+    int out_c = kernel.c;
+
+    Mat im_col;
+    im2col(input,im_col,opt,kernel_size,stride,dilation);
+
+    Mat kernel_col;
+    kernel2col(kernel,kernel_col,opt);
+
+    Mat out_col;
+    gemm(kernel_col,im_col,bias,out_col,opt);
+
+    col2im(out_col,output,opt,out_w,out_h,out_c);
+}
+
+#ifdef EASTNN_USE_CUDA
+void cuda_im2col_gemm_bias(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation,const Optional& opt)
+{
+    int input_w = input.w;
+    int input_h = input.h;
+    int in_channels=input.c;
+    int kernel_w = kernel_size[0];
+    int kernel_h = kernel_size[1];
+    
+    int stride_w = stride[0];
+    int stride_h = stride[1];
+
+    int dilation_w = dilation[0];
+    int dilation_h = dilation[1];
+    int out_w = (input_w-kernel_w)/stride_w+1;
+    int out_h = (input_h-kernel_h)/stride_h+1;
+    int out_c = kernel.c;
+    
+    Mat im_col;
+    im2col(input,im_col,opt,kernel_size,stride,dilation);
+
+
+    Mat kernel_col;
+    kernel2col(kernel,kernel_col,opt);
+
+    Mat out_col;
+    if(kernel_col.w<16||kernel_col.h<16||im_col.w<16||im_col.h<16) gemm(kernel_col,im_col,bias,out_col,opt);
+    else cuda_gemm(kernel_col,im_col,out_col,bias,opt);
+
+    col2im(out_col,output,opt,out_w,out_h,out_c);
+
+}
+
+#endif
 }//namespace

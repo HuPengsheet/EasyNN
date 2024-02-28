@@ -3,7 +3,7 @@
 #include"ir.h"
 #include"net.h"
 #include"mat.h"
-#include"layers/silu.h"
+#include"layers/cxx/silu.h"
 #include"optional.h"
 
 TEST(SILU,forward)
@@ -42,6 +42,9 @@ TEST(SILU,forward)
     s1.forward(m1,out_m1,option);
     s1.forward(m2,out_m2,option);
     s1.forward(m3,out_m3,option);
+    // printMat(out_m1);
+    // printMat(out_m2);
+    // printMat(out_m3);
     EXPECT_EQ(compareMat(out_m1,m4),0);
     EXPECT_EQ(compareMat(out_m2,m5),0);
     EXPECT_EQ(compareMat(out_m3,m6),0);

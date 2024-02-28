@@ -1,7 +1,7 @@
 
 find_package(OpenCV QUIET COMPONENTS core highgui imgproc)
 
-link_directories(${CMAKE_SOURCE_DIR}/build/src/)
+link_directories(${CMAKE_SOURCE_DIR}/build/src/cxx)
 
 file(GLOB  cpp_files ${EXAMPLE}/*.cpp)
 foreach(cpp_file ${cpp_files})
