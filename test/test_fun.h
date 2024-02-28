@@ -23,7 +23,7 @@ void printMat(const easynn::Mat& m)
             {
                 for (int x=0; x<m.w; x++)
                 {
-                    printf("%.3f ", ptr[x]);
+                    printf("%f ", ptr[x]);
                 }
                 ptr += m.w;
                 printf("\n");
