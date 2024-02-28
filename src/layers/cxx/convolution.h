@@ -42,7 +42,7 @@ void kernel2col(const Mat & input,Mat& output,const Optional& opt);
 void col2im(const Mat & input,Mat& output,const Optional& opt);
 void gemm(const Mat & A,const Mat& B,const Mat& bias,Mat& C,const Optional& opt);
 void im2colGemm(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation,const Optional& opt);
-
+void cuda_im2col_gemm_bias(const Mat& input,const Mat& kernel,const Mat& bias,Mat& output,const std::vector<int> kernel_size,const std::vector<int> stride,const std::vector<int> dilation,const Optional& opt);
 
 } //namespace
 
