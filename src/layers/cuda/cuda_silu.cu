@@ -17,7 +17,6 @@ __global__ void cuda_silu_forward(float* input,float* output,int n)
 }
 
 
-
 void cuda_silu(const Mat& input,Mat& output,const Optional& op)
 {
     int count=input.w*input.h*input.c*input.d;
@@ -27,8 +26,10 @@ void cuda_silu(const Mat& input,Mat& output,const Optional& op)
     Mat cu_mat_input = input.reshape(count);
     Mat cu_mat_output(count);
 
-    float* d_input  =  (float*)fastCudaMalloc(nbytes);
-    float* d_output =  (float*)fastCudaMalloc(nbytes);
+    float* d_input,*d_output;
+
+    CHECK(cudaMalloc(&d_input,nbytes));
+    CHECK(cudaMalloc(&d_output,nbytes));
 
     cudaMemcpy(d_input, cu_mat_input.data, nbytes, cudaMemcpyHostToDevice);
 
@@ -46,8 +47,8 @@ void cuda_silu(const Mat& input,Mat& output,const Optional& op)
     else if (input.dims == 4)
         output=cu_mat_output.reshape(input.w, input.h, input.d, input.c);
 
-    fastCudaFree(d_input);
-    fastCudaFree(d_output);
+    CHECK(cudaFree(d_input));
+    CHECK(cudaFree(d_output));
         
 }
 
