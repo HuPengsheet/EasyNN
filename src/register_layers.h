@@ -31,19 +31,19 @@
 
 typedef  easynn::Layer*(*layer_factory)();   
 
-register_layer(Input);
-register_layer(Output);
-register_layer(Relu);
+register_layer(Input);              //no need
+register_layer(Output);             //no need
+register_layer(Relu);               //cuda accelerate
 register_layer(AdaptivePool);
-register_layer(Convolution);
+register_layer(Convolution);        //cuda accelerate
 register_layer(Expression);
 register_layer(Flatten);
 register_layer(Linear);
 register_layer(MaxPool);
 register_layer(Cat);
-register_layer(Contiguous);
+register_layer(Contiguous);         //no need
 register_layer(Permute);
-register_layer(Silu);
+register_layer(Silu);               //cuda accelerate
 register_layer(Upsample);
 register_layer(View);
 
