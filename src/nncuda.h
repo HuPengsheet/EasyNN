@@ -3,9 +3,6 @@
 
 #ifdef EASTNN_USE_CUDA
 
-
-
-
 #define EASYNN_MALLOC_ALIGN 64
 #define EASYNN_MALLOC_OVERREAD 64
 
@@ -40,9 +37,6 @@ inline int CAFFE_GET_BLOCKS(const int N) {
 }
 
 namespace easynn{
-
-void* fastCudaMalloc(size_t size);
-void  fastCudaFree(void * ptr);
 
 } //namespace easynn
 

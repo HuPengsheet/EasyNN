@@ -2,6 +2,10 @@
 #include"relu.h"
 #include"benchmark.h"
 
+#ifdef EASTNN_USE_CUDA
+#include"layers/cuda/cuda_relu.h"
+#endif
+
 namespace easynn{
 
 Relu::Relu()
@@ -11,6 +15,15 @@ Relu::Relu()
 int Relu::forward(const Mat& input,Mat& output,const Optional& op)
 {
     double start = get_current_time();
+
+    #ifdef EASTNN_USE_CUDA
+        double cuda_start = get_current_time();
+        cuda_relu(input,output,op);
+        double cuda_end = get_current_time();
+        printf("%-25s,in_channels:%-4d, out_channels:%-4d, input_h:%-4d ,input_w:%-4d ,out_h:%-4d ,out_w:%-4d ,time=%fms\n",name.c_str(),input.c,output.c,input.h,input.w,output.h,output.w,cuda_end-cuda_start);
+        return 0;
+    #endif
+
     if (input.dims == 1)
         output.create(input.w);
     else if (input.dims == 2)
