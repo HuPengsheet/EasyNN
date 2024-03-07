@@ -29,12 +29,18 @@ do                                                    \
        i += blockDim.x * gridDim.x)
 
 // CUDA: use 512 threads per block
-const int EASYNN_CUDA_NUM_THREADS = 512;
+const int EASYNN_CUDA_NUM_THREADS = 256;
+const int CUDA_VEC_SIZE =4;
 
 // CUDA: number of blocks for threads.
-inline int CAFFE_GET_BLOCKS(const int N) {
+inline int EASYNN_GET_BLOCKS(const int N) {
   return (N + EASYNN_CUDA_NUM_THREADS - 1) / EASYNN_CUDA_NUM_THREADS;
 }
+
+inline int EASYNN_GET_VEC_BLOCKS(const int N) {
+  return ((N + EASYNN_CUDA_NUM_THREADS - 1) / EASYNN_CUDA_NUM_THREADS+CUDA_VEC_SIZE-1)/CUDA_VEC_SIZE;
+}
+
 
 namespace easynn{
 

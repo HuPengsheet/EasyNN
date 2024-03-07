@@ -7,6 +7,7 @@
 namespace easynn
 {
     void cuda_silu(const Mat& input,Mat& output,const Optional& op);
+    void cuda_silu_vec(const Mat& input,Mat& output,const Optional& op);
 }
 
 
