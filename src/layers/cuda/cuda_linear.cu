@@ -1,4 +1,5 @@
 #include"nncuda.h"
+#include"cuda_linear.h"
 #include"cuda_gemm.h"
 #include<stdio.h>
 
@@ -75,21 +76,23 @@ __global__ void cuda_sgemm_forward(size_t m,size_t n,size_t k,float* a,float* b,
 
 
 //a和b分别是两个以及im2col的矩阵
-void cuda_gemm(const Mat& input_a,const Mat& input_b,Mat& output_c,const Mat& bias,const Optional& op)
+void cuda_linear(const Mat& input_a,const Mat& input_b,Mat& output_c,const Mat& bias,const Optional& op)
 {
-    if(input_a.w!=input_b.h) 
+
+    Mat cuda_b = input_b.reshape(1,input_b.w);
+
+    if(input_a.w!=cuda_b.h) 
     {
         printf("input_a.w!=input_b.h , can not mutl\n");
     }
 
-    //printf("input_a.w=k=%d  input_a.h=m=%d  input_a.c=%d\n",input_a.w,input_a.h,input_a.c);
-    //printf("input_b.w=n=%d  input_b.h=k=%d  input_b.c=%d\n",input_b.w,input_b.h,input_b.c);
+    // printf("input_a.w=k=%d  input_a.h=m=%d  input_a.c=%d\n",input_a.w,input_a.h,input_a.c);
+    // printf("cuda_b.w=n=%d  cuda_b.h=k=%d  cuda_b.c=%d\n",cuda_b.w,cuda_b.h,cuda_b.c);
 
     int m = input_a.h;
     int k = input_a.w;
-    int n = input_b.w;
+    int n = cuda_b.w;
     
-    //printf("%d \n",bias.w);
 
     output_c.create(m,n);
 
@@ -107,7 +110,7 @@ void cuda_gemm(const Mat& input_a,const Mat& input_b,Mat& output_c,const Mat& bi
     //printf("11 %p %p %p %p \n",d_a,d_b,d_c,d_bias);
 
     CHECK(cudaMemcpy(d_a,(float *)input_a.data,a_nbytes,cudaMemcpyHostToDevice));
-    CHECK(cudaMemcpy(d_b,(float *)input_b.data,b_nbytes,cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_b,(float *)cuda_b.data,b_nbytes,cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_bias,(float *)bias.data,d_nbytes,cudaMemcpyHostToDevice));
 
     constexpr int BLOCK = 16;
@@ -123,7 +126,12 @@ void cuda_gemm(const Mat& input_a,const Mat& input_b,Mat& output_c,const Mat& bi
     CHECK(cudaFree(d_b));
     CHECK(cudaFree(d_c));
     CHECK(cudaFree(d_bias));
+
+    int count=output_c.w*output_c.h*output_c.c*output_c.d;
+    output_c.reshape(count);
 }
+
+
 
 
 
