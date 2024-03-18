@@ -78,4 +78,4 @@ tar -xf model.tar.xz
 
 本项目中很大一部分代码参考了优秀的推理框架[ncnn](https://github.com/Tencent/ncnn)
 
-部分代码借鉴了[KuiperInfer](https://github.com/zjhellofss/KuiperInfer)
+其中example下的部分代码借鉴了[KuiperInfer](https://github.com/zjhellofss/KuiperInfer)
