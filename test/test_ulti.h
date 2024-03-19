@@ -316,6 +316,8 @@ private:
     std::string filter;
 };
 
+
+//宏展开,函数声明,把函数指针加入TestEntity中,函数实现
 #define TEST(set, name) \
     void qtest_##set##_##name(int* qtest_current_fail_cnt); \
     int qtest_mark_##set##_##name = TestEntity::get_instance().add(#set, #name, qtest_##set##_##name, #set "." #name); \
