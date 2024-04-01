@@ -8,7 +8,7 @@ EasyNN是一个面向教学而研发的推理框架，旨在帮助大家在最�
 - **使用PNNX作为模型中间结构**：EasyNN采用[PNNX](https://github.com/Tencent/ncnn/tree/master/tools/pnnx)作为模型的中间结构，大大提高了开发效率。
 - **支持动态尺寸输入**：EasyNN具备支持图片动态尺寸输入的能力。使用递归的方式在运行时构建计算顺序，无需指定固定尺寸。
 - **OpenMP多线程加速**：EasyNN利用OpenMP技术实现了多线程加速，以提高推理速度。
-- **OpenMP多线程加速**：EasyNN部分算子支持CUDA加速,卷积算子支持im2col+CUDA GEMM加速
+- **CUDA加速**：EasyNN部分算子支持CUDA加速,卷积算子支持im2col+CUDA GEMM加速
 - **简洁易读的代码**：EasyNN的代码仅采用部分C++11特性编写，代码简洁易读。
 - **完善的开发文档和教程**：在开发文档中详细介绍了每个类和函数的作用，并在B站配备视频讲解，带各位敲每一行代码。
 
